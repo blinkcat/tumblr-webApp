@@ -1,13 +1,13 @@
 const tumblr = require('tumblr.js'),
     ConsumerKey = process.env.ConsumerKey,
     ConsumerSecret = process.env.ConsumerSecret,
-    callbackURL = process.env.callbackURL,
-    OAuth = require('oauth').OAuth //,
+    callbackURL = process.env.callbackURL || '',
+    OAuth = require('oauth').OAuth
     // client = tumblr.createClient({
     //     consumer_key: ConsumerKey,
     //     consumer_secret: ConsumerSecret,
-    //     token: 'Keq3BGNzvm5L7RtsrJU4tE3JX1gFyTZQbws0oQ0jm1NQpDIoSQ',
-    //     token_secret: 'dyEGe0IMdWlgvytoTbUeGlHujA3k1FU6tdzel1MHVM0AkriBxY'
+    //     token: '',
+    //     token_secret: ''
     // })
 
 // Request-token URL   https://www.tumblr.com/oauth/request_token
@@ -16,14 +16,15 @@ const tumblr = require('tumblr.js'),
 // https://github.com/stigok/node-oauth-tumblr-example/blob/master/src/routes/oauth.js
 
 var oa = new OAuth(
-    'https://www.tumblr.com/oauth/request_token',
-    'https://www.tumblr.com/oauth/access_token',
-    ConsumerKey,
-    ConsumerSecret,
-    '1.0A',
-    callbackURL,
-    'HMAC-SHA1'
-)
+        'https://www.tumblr.com/oauth/request_token',
+        'https://www.tumblr.com/oauth/access_token',
+        ConsumerKey,
+        ConsumerSecret,
+        '1.0A',
+        callbackURL,
+        'HMAC-SHA1'
+    ),
+    client = null
 
 /**
  * host
@@ -58,8 +59,36 @@ exports.handleCb = function(req, res, next) {
             } else {
                 req.session.token = token
                 req.secret.secret = secret
+                res.cookie('token', token, { httpOnly: true })
+                res.cookie('secret', secret, { httpOnly: true })
                 console.log(`token: ${token} | secret: ${secret}`)
+                res.redirect('/')
             }
+        })
+    }
+}
+
+exports.index = function(req, res) {
+    const { token, secret } = req.cookies
+    if (!token || !secret) {
+        res.redirect('/login')
+    } else {
+        if (!client) {
+            client = tumblr.createClient({
+                credentials: {
+                    consumer_key: ConsumerKey,
+                    consumer_secret: ConsumerSecret,
+                    token,
+                    secret
+                },
+                returnPromises: true
+            })
+        }
+        client.userInfo().then(data => {
+            console.log(data)
+        }).catch(e => {
+            console.log(e.message)
+            throw e
         })
     }
 }
