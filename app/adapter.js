@@ -1,16 +1,19 @@
-// Adapter
-// https://github.com/stigok/node-oauth-tumblr-example/blob/master/src/routes/oauth.js
 const tumblr = require('tumblr.js'),
     ConsumerKey = process.env.ConsumerKey,
     ConsumerSecret = process.env.ConsumerSecret,
-    callbackURL = '',
-    OAuth = require('oauth').OAuth,
-    client = tumblr.createClient({
-        consumer_key: ConsumerKey,
-        consumer_secret: ConsumerSecret,
-        token: 'Keq3BGNzvm5L7RtsrJU4tE3JX1gFyTZQbws0oQ0jm1NQpDIoSQ',
-        token_secret: 'dyEGe0IMdWlgvytoTbUeGlHujA3k1FU6tdzel1MHVM0AkriBxY'
-    })
+    callbackURL = process.env.callbackURL,
+    OAuth = require('oauth').OAuth //,
+    // client = tumblr.createClient({
+    //     consumer_key: ConsumerKey,
+    //     consumer_secret: ConsumerSecret,
+    //     token: 'Keq3BGNzvm5L7RtsrJU4tE3JX1gFyTZQbws0oQ0jm1NQpDIoSQ',
+    //     token_secret: 'dyEGe0IMdWlgvytoTbUeGlHujA3k1FU6tdzel1MHVM0AkriBxY'
+    // })
+
+// Request-token URL   https://www.tumblr.com/oauth/request_token
+// Authorize URL   https://www.tumblr.com/oauth/authorize
+// Access-token URL    https://www.tumblr.com/oauth/access_token
+// https://github.com/stigok/node-oauth-tumblr-example/blob/master/src/routes/oauth.js
 
 var oa = new OAuth(
     'https://www.tumblr.com/oauth/request_token',
@@ -22,40 +25,41 @@ var oa = new OAuth(
     'HMAC-SHA1'
 )
 
-oa.getOAuthRequestToken(function(error, oAuthToken, oAuthTokenSecret, results) {
-    var urlObj = nodeUrl.parse(request.url, true);
-    var authURL = 'https://www.tumblr.com/oauth/authorize?oauth_token=' + oAuthToken;
-    var handlers = {
-        '/': function(request, response) {
-            /**
-             * Creating an anchor with authURL as href and sending as response
-             */
-            var body = '<a href="' + authURL + '"> Get Code </a>';
-            response.writeHead(200, {
-                'Content-Length': body.length,
-                'Content-Type': 'text/html'
-            });
-            response.end(body);
-        },
-        '/callback': function(request, response) {
-            /** Obtaining access_token */
-            var getOAuthRequestTokenCallback = function(error, oAuthAccessToken,
-                oAuthAccessTokenSecret, results) {
-                if (error) {
-                    console.log(error);
-                    response.end(JSON.stringify({
-                        message: 'Error occured while getting access token',
-                        error: error
-                    }));
-                    return;
-                }
-            };
-
-            oa.getOAuthAccessToken(urlObj.query.oauth_token, oAuthTokenSecret,
-                urlObj.query.oauth_verifier,
-                getOAuthRequestTokenCallback);
-
+/**
+ * host
+ *66.6.33.193 tumblr.com
+ *66.6.32.4   tumblr.co
+ *66.6.32.4   api.tumblr.com
+ *66.6.32.4   www.tumblr.com
+ */
+exports.login = function(req, res, next) {
+    oa.getOAuthRequestToken(function(err, token, secret) {
+        if (err) {
+            next(err)
+        } else {
+            console.log(`token: ${token} | secret: ${secret}`)
+            req.session.requestToken = token
+            req.session.requestTokenSecret = secret
+            res.set('Content-Type', 'text/html')
+            res.status(200).send(`<a href='https://www.tumblr.com/oauth/authorize?oauth_token=${token}'>login tumblr</a>`)
         }
-    };
-    handlers[urlObj.pathname](request, response);
-})
+    })
+}
+
+exports.handleCb = function(req, res, next) {
+    console.log(`oauth_token: ${req.query.oauth_token} | oauth_verifier: ${req.query.oauth_verifier}`)
+    console.log(`session token: ${req.session.requestToken} | session secret: ${req.session.requestTokenSecret}`)
+    if (!req.session.requestToken || !req.session.requestTokenSecret) {
+        next(Error('missing session information'))
+    } else {
+        oa.getOAuthAccessToken(req.query.oauth_token, req.session.requestTokenSecret, req.query.oauth_verifier, function(err, token, secret) {
+            if (err) {
+                next(Error('getOAuthAccessToken failed'))
+            } else {
+                req.session.token = token
+                req.secret.secret = secret
+                console.log(`token: ${token} | secret: ${secret}`)
+            }
+        })
+    }
+}

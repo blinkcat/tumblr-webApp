@@ -19,4 +19,9 @@ module.exports = function(app) {
         resave: false,
         saveUninitialized: true
     }))
+
+    app.use(function(err, req, res, next) {
+        console.log('err', err)
+        res.status(500).send('test').end()
+    })
 }
