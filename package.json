@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "cross-env NODE_ENV=development nodemon server",
-    "dev": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --color --hot --inline --port 3000"
+    "dev": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --content-base ./app/view/ --progress --color --hot --inline --port 3000"
   },
   "repository": {
     "type": "git",
@@ -46,6 +46,7 @@
   },
   "devDependencies": {
     "cors": "^2.8.1",
+    "node-sass": "^3.10.1",
     "nodemon": "^1.11.0",
     "webpack-dev-server": "^1.16.2"
   }

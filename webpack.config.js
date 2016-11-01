@@ -17,13 +17,12 @@ module.exports = {
             query: {
                 presets: ['react', 'es2015']
             }
-        }, //{
-            // test: /\.scss$/,
-            // loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap!sass-loader?sourceMap')
-        //}, 
-        {
+        }, {
+            test: /\.scss$/,
+            loader: 'style!css?sourceMap!sass?sourceMap'
+        }, {
             test: /\.(gif|jpg|png|woff2)\??.*$/,
-            loader: 'url-loader?limit=3072'
+            loader: 'url?limit=3072'
         }]
     },
     // resolve: {
@@ -37,7 +36,7 @@ module.exports = {
     // },
     plugins: [
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+            'process.env.NODE_ENV': JSON.stringify('development')
         })
     ],
     devtool: 'cheap-module-eval-source-map'

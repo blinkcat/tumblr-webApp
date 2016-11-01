@@ -1,4 +1,4 @@
-var adapter = require('../app/adapter.js')
+var adapter = require('../app/controller/adapter.js')
 
 module.exports = function(app) {
     app.get('/', adapter.index)
