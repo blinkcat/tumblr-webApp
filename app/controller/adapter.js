@@ -79,7 +79,7 @@ exports.index = function(req, res) {
                     consumer_key: ConsumerKey,
                     consumer_secret: ConsumerSecret,
                     token,
-                    secret
+                    token_secret: secret
                 },
                 returnPromises: true
             })
