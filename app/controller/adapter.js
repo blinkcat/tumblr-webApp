@@ -1,4 +1,6 @@
 const tumblr = require('tumblr.js'),
+    co = require('co'),
+    wrap = co.wrap,
     ConsumerKey = process.env.ConsumerKey,
     ConsumerSecret = process.env.ConsumerSecret,
     callbackURL = process.env.callbackURL || '',
@@ -59,8 +61,8 @@ exports.handleCb = function(req, res, next) {
             } else {
                 req.session.token = token
                 req.secret.secret = secret
-                res.cookie('token', token, { httpOnly: true })
-                res.cookie('secret', secret, { httpOnly: true })
+                res.cookie('token', token, { httpOnly: true, signed: true, maxAge: 30 * 24 * 60 * 60 * 1000 })
+                res.cookie('secret', secret, { httpOnly: true, signed: true, maxAge: 30 * 24 * 60 * 60 * 1000 })
                 console.log(`token: ${token} | secret: ${secret}`)
                 res.redirect('/')
             }
@@ -69,7 +71,7 @@ exports.handleCb = function(req, res, next) {
 }
 
 exports.index = function(req, res) {
-    const { token, secret } = req.cookies
+    const { token, secret } = req.signedCookies
     if (!token || !secret) {
         res.redirect('/login')
     } else {
@@ -86,9 +88,26 @@ exports.index = function(req, res) {
         }
         client.userInfo().then(data => {
             console.log(data)
+            res.send('success')
         }).catch(e => {
             console.log(e.message)
             throw e
         })
     }
 }
+
+exports.client = client
+
+exports.userInfo = wrap(function*(req, res) {
+    if (!client) {
+        res.json({ error: true, message: 'you have no authorization' })
+        return
+    }
+    try {
+        var userInfo = yield client.userInfo()
+    } catch (e) {
+        console.log(e.message)
+        res.json({ error: true, message: e.message })
+    }
+    res.json(userInfo)
+})
