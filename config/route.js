@@ -1,4 +1,5 @@
-var adapter = require('../app/controller/adapter.js')
+var adapter = require('../app/controller/adapter'),
+    { rquireAuth } = require('./middlewares')
 
 module.exports = function(app) {
     // oauth
@@ -7,5 +8,5 @@ module.exports = function(app) {
     app.get('/callback', adapter.handleCb)
 
     // api
-    app.get('/api/userInfo', adapter.userInfo)
+    app.get('/api/userInfo', rquireAuth, adapter.userInfo)
 }

@@ -30,10 +30,10 @@ var oa = new OAuth(
 
 /**
  * host
- *66.6.33.193 tumblr.com
- *66.6.32.4   tumblr.co
- *66.6.32.4   api.tumblr.com
- *66.6.32.4   www.tumblr.com
+ * 66.6.33.193 tumblr.com
+ * 66.6.32.4   tumblr.co
+ * 66.6.32.4   api.tumblr.com
+ * 66.6.32.4   www.tumblr.com
  */
 exports.login = function(req, res, next) {
     oa.getOAuthRequestToken(function(err, token, secret) {
@@ -99,10 +99,10 @@ exports.index = function(req, res) {
 exports.client = client
 
 exports.userInfo = wrap(function*(req, res) {
-    if (!client) {
-        res.json({ error: true, message: 'you have no authorization' })
-        return
-    }
+    // if (!client) {
+    //     res.json({ error: true, message: 'you have no authorization' })
+    //     return
+    // }
     try {
         var userInfo = yield client.userInfo()
     } catch (e) {
