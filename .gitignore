@@ -1,3 +1,5 @@
 /node_modules
 *.env
+*.bat
 npm-debug.log
+npm-debug.log.*

@@ -28,6 +28,10 @@ var oa = new OAuth(
     ),
     client = null
 
+exports.isClientOK = function() {
+    return !!client
+}
+
 /**
  * host
  * 66.6.33.193 tumblr.com
@@ -43,8 +47,10 @@ exports.login = function(req, res, next) {
             console.log(`token: ${token} | secret: ${secret}`)
             req.session.requestToken = token
             req.session.requestTokenSecret = secret
-            res.set('Content-Type', 'text/html')
-            res.status(200).send(`<a href='https://www.tumblr.com/oauth/authorize?oauth_token=${token}'>login tumblr</a>`)
+                // res.set('Content-Type', 'text/html')
+                // res.status(200).send(`<a href='https://www.tumblr.com/oauth/authorize?oauth_token=${token}'>login tumblr</a>`)
+
+            res.redirect(`https://www.tumblr.com/oauth/authorize?oauth_token=${token}`)
         }
     })
 }
@@ -86,13 +92,14 @@ exports.index = function(req, res) {
                 returnPromises: true
             })
         }
-        client.userInfo().then(data => {
-            console.log(data)
-            res.send('success')
-        }).catch(e => {
-            console.log(e.message)
-            throw e
-        })
+        // client.userInfo().then(data => {
+        //     console.log(data)
+        //     res.send('success')
+        // }).catch(e => {
+        //     console.log(e.message)
+        //     throw e
+        // })
+        res.redirect('http://localhost:3000/')
     }
 }
 
