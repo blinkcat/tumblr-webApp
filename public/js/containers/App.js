@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { loadUserInfo } from '../actions'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import AppBar from 'material-ui/AppBar'
-import BottomNavigationExampleSimple from '../components/BottomNavigationExampleSimple'
-import TabsExampleIcon from '../components/TabsExampleIcon'
+import TAppBar from '../components/TAppBar'
 
 class App extends Component {
 
@@ -16,12 +14,10 @@ class App extends Component {
     render() {
         return (
             <MuiThemeProvider>
-            	<div>
-   					<AppBar title="tumblr" />
-   					<BottomNavigationExampleSimple />
-   					<TabsExampleIcon />
-   				</div>
-   			</MuiThemeProvider>
+            <div>
+             <TAppBar/>
+            </div>
+          </MuiThemeProvider>
         )
     }
 }

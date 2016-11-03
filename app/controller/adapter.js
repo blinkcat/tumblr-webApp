@@ -28,8 +28,20 @@ var oa = new OAuth(
     ),
     client = null
 
-exports.isClientOK = function() {
+exports.isClientOK = function isClientOK() {
     return !!client
+}
+
+exports.createClient = function createClient({ token, secret }) {
+    client = tumblr.createClient({
+        credentials: {
+            consumer_key: ConsumerKey,
+            consumer_secret: ConsumerSecret,
+            token,
+            token_secret: secret
+        },
+        returnPromises: true
+    })
 }
 
 /**
@@ -81,16 +93,8 @@ exports.index = function(req, res) {
     if (!token || !secret) {
         res.redirect('/login')
     } else {
-        if (!client) {
-            client = tumblr.createClient({
-                credentials: {
-                    consumer_key: ConsumerKey,
-                    consumer_secret: ConsumerSecret,
-                    token,
-                    token_secret: secret
-                },
-                returnPromises: true
-            })
+        if (!isClientOK()) {
+            createClient({ token, secret })
         }
         // client.userInfo().then(data => {
         //     console.log(data)
@@ -106,10 +110,6 @@ exports.index = function(req, res) {
 exports.client = client
 
 exports.userInfo = wrap(function*(req, res) {
-    // if (!client) {
-    //     res.json({ error: true, message: 'you have no authorization' })
-    //     return
-    // }
     try {
         var userInfo = yield client.userInfo()
     } catch (e) {

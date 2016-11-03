@@ -1,4 +1,10 @@
 body {
     font-family: 'Roboto', sans-serif;
-    margin: 0;
+}
+
+button,
+html [type="button"],
+[type="reset"],
+[type="submit"] {
+    -webkit-appearance: initial;
 }

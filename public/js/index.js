@@ -5,6 +5,7 @@ import { Provider } from 'react-redux'
 import App from './containers/App'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import 'normalize.css'
+import '../sass/index.scss'
 
 injectTapEventPlugin()
 
