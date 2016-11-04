@@ -26,6 +26,11 @@ export default class TAppBar extends Component {
     handleClose() { this.setState({ open: false }) }
 
     render() {
+        const { following = 0, likes = 0, blogs = [{}] } = this.props
+        const { name = '', description = '', url = '' } = blogs[0]
+        var avatarSrc = url
+        avatarSrc = avatarSrc.replace(/http:\/\/|https:\/\/|\//g, '')
+        avatarSrc = avatarSrc ? `https://api.tumblr.com/v2/blog/${avatarSrc}/avatar` : ''
         return (
             <div>
                 <AppBar title="tumblr" onLeftIconButtonTouchTap={this.handleToggle}/>
@@ -36,8 +41,8 @@ export default class TAppBar extends Component {
                 >
                     <List>
                       <ListItem primaryText="首页" leftIcon={<ActionHome />} />
-                      <ListItem primaryText="喜欢" leftIcon={<ActionFavorite />} rightIcon={<Badge badgeContent={0} primary={true}/>} />
-                      <ListItem primaryText="关注" leftIcon={<ActionNoteAdd />} rightIcon={<Badge badgeContent={0} primary={true}/>} />
+                      <ListItem primaryText="喜欢" leftIcon={<ActionFavorite />} rightIcon={<Badge badgeContent={likes} primary={true}/>} />
+                      <ListItem primaryText="关注" leftIcon={<ActionNoteAdd />} rightIcon={<Badge badgeContent={following} primary={true}/>} />
                       <ListItem primaryText="设置" leftIcon={<ActionSettings />} />
                       <ListItem primaryText="新建帖子" leftIcon={<ContentCreate />} />
                     </List>
@@ -45,9 +50,9 @@ export default class TAppBar extends Component {
                     <List>
                         <Subheader>博客</Subheader>
                         <ListItem
-                            leftAvatar={<Avatar src="https://api.tumblr.com/v2/blog/intomist.tumblr.com/avatar" />}
-                            primaryText="intomist"
-                            secondaryText="leave me alone"
+                            leftAvatar={<Avatar src={avatarSrc} />}
+                            primaryText={name}
+                            secondaryText={description}
                         />
                     </List> 
                 </Drawer>

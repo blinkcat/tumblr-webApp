@@ -114,7 +114,7 @@ exports.userInfo = wrap(function*(req, res) {
         var userInfo = yield client.userInfo()
     } catch (e) {
         console.log(e.message)
-        res.json({ error: true, message: e.message })
+        res.status(500).json({ error: true, message: e.message })
     }
     res.json(userInfo)
 })

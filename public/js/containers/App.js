@@ -15,7 +15,7 @@ class App extends Component {
         return (
             <MuiThemeProvider>
             <div>
-             <TAppBar/>
+              <TAppBar {...this.props.user}/>
             </div>
           </MuiThemeProvider>
         )
@@ -23,7 +23,8 @@ class App extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    return {}
+    const { user = {} } = state
+    return { user }
 }
 
 export default connect(mapStateToProps, {

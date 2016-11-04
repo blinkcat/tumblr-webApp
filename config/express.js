@@ -8,7 +8,8 @@ module.exports = function(app) {
     //添加中间件 
     if (process.env.NODE_ENV == 'development') {
         var corsOptions = {
-                origin: 'http://localhost:3000'
+                origin: 'http://localhost:3000',
+                credentials: true
             },
             cors = require('cors')
         app.use(cors(corsOptions))

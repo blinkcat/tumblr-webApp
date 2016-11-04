@@ -9,22 +9,27 @@ export const USERINFO_FAILURE = 'USERINFO_FAILURE'
 const fetchUserInfo = () => ({
     [CALL_API]: {
         types: [
-            USERINFO_REQUEST, {
-                type: USERINFO_SUCCESS,
-                payload: (action, state, res) => {
-                    const contentType = res.headers.get('Content-Type')
-                    if (contentType && ~contentType.indexOf('json')) {
-                        return res.json().then((json) => normalize(json, api.userInfo.schema))
-                    }
-                }
-            },
+            USERINFO_REQUEST,
+            USERINFO_SUCCESS,
+            // {
+            //     type: USERINFO_SUCCESS,
+            //     payload: (action, state, res) => {
+            //         const contentType = res.headers.get('Content-Type')
+            //         if (contentType && ~contentType.indexOf('json')) {
+            //             return res.json().then((json) => normalize(json, api.userInfo.schema))
+            //         }
+            //     }
+            // },
             USERINFO_FAILURE
         ],
         method: 'GET',
-        endpoint: api.userInfo.path
+        endpoint: api.userInfo.path,
+        credentials: 'include' //'same-origin'
     }
 })
 
 export const loadUserInfo = () => (dispatch, getState) => {
-    return dispatch(fetchUserInfo())
+    if (!getState().user) {
+        return dispatch(fetchUserInfo())
+    }
 }
