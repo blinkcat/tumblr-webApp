@@ -11,10 +11,12 @@ if (curEnv == 'development') {
 }
 
 //schema
-const user = new Schema('users', { idAttribute: 'name' })
+const user = new Schema('users', { idAttribute: 'name' }),
+    post = new Schema('posts')
 
 const api = {
-    userInfo: { path: `${abPath}/api/userInfo`, schema: { user } }
+    userInfo: { path: `${abPath}/api/userInfo`, schema: { user } },
+    dashboard: { path: `${abPath}/api/dashboard`, schema: { posts: arrayOf(post) } }
 }
 
 export { api }

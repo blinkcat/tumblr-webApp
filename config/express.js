@@ -2,6 +2,7 @@ const express = require('express'),
     cors = require('cors'),
     cookieParser = require('cookie-parser'),
     session = require('express-session'),
+    bodyParser = require('body-parser'),
     secret = process.env.secret || 'blinkcat'
 
 module.exports = function(app) {
@@ -20,7 +21,8 @@ module.exports = function(app) {
         resave: false,
         saveUninitialized: true
     }))
-
+    app.use(bodyParser.json())
+    app.use(bodyParser.urlencoded({ extended: true }))
     app.use(function(err, req, res, next) {
         console.log('err', err)
         res.status(500).send('test').end()

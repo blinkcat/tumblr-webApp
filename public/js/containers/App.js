@@ -5,10 +5,12 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import TAppBar from '../components/TAppBar'
 
 class App extends Component {
+    constructor(props) {
+        super(props)
+    }
 
     componentDidMount() {
         this.props.loadUserInfo()
-        console.log(this.props)
     }
 
     render() {
@@ -16,6 +18,7 @@ class App extends Component {
             <MuiThemeProvider>
             <div>
               <TAppBar {...this.props.user}/>
+              {this.props.children}
             </div>
           </MuiThemeProvider>
         )

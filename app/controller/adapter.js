@@ -113,8 +113,18 @@ exports.userInfo = wrap(function*(req, res) {
     try {
         var userInfo = yield client.userInfo()
     } catch (e) {
-        console.log(e.message)
+        console.log('userInfo', e.message)
         res.status(500).json({ error: true, message: e.message })
     }
     res.json(userInfo)
+})
+
+exports.dashboard = wrap(function*(req, res) {
+    try {
+        var dashboard = yield client.userDashboard(req.query)
+    } catch (e) {
+        console.log('dashboard', e.message)
+        res.status(500).json({ error: true, message: e.message })
+    }
+    res.json(dashboard)
 })

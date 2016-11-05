@@ -9,4 +9,5 @@ module.exports = function(app) {
 
     // api
     app.get('/api/userInfo', rquireAuth, adapter.userInfo)
+    app.get('/api/dashboard', rquireAuth, adapter.dashboard)
 }
