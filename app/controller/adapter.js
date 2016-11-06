@@ -128,3 +128,16 @@ exports.dashboard = wrap(function*(req, res) {
     }
     res.json(dashboard)
 })
+
+exports.userLikes = wrap(function*(req, res) {
+    try {
+        var userLikes = yield client.userLikes(req.query)
+    } catch (e) {
+        console.log('userLikes', e.message)
+        res.status(500).json({ error: true, message: e.message })
+    }
+    var temp = {}
+    temp.posts = userLikes.liked_posts
+    temp.count = userLikes.liked_count
+    res.json(temp)
+})

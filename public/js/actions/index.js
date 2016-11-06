@@ -42,7 +42,6 @@ const fetchDashBoard = ({ limit, offset }) => ({
             DASHBOARD_REQUEST, {
                 type: DASHBOARD_SUCCESS,
                 payload: (action, state, res) => {
-                    console.log('here')
                     const contentType = res.headers.get('Content-Type')
                     if (contentType && ~contentType.indexOf('json')) {
                         return res.json().then((json) => normalize(json, api.dashboard.schema))
@@ -61,5 +60,40 @@ export const loadDashBoard = () => (dispatch, getState) => {
     var dashboard = getState().pagination.dashboard
     if (!dashboard.isFetching) {
         return dispatch(fetchDashBoard({ limit: 10, offset: 10 * (dashboard.page - 1) }))
+    }
+}
+
+export const LIKES_REQUEST = 'LIKES_REQUEST'
+export const LIKES_SUCCESS = 'LIKES_SUCCESS'
+export const LIKES_FAILURE = 'LIKES_FAILURE'
+
+const fetchLikes = ({ limit, offset }) => ({
+    [CALL_API]: {
+        types: [
+            LIKES_REQUEST, {
+                type: LIKES_SUCCESS,
+                payload: (action, state, res) => {
+                    const contentType = res.headers.get('Content-Type')
+                    if (contentType && ~contentType.indexOf('json')) {
+                        return res.json().then((json) => normalize(json, api.likes.schema))
+                    }
+                }
+            },
+            LIKES_FAILURE
+        ],
+        method: 'GET',
+        endpoint: `${api.likes.path}?limit=${limit}&offset=${offset}`,
+        credentials
+    }
+})
+
+export const loadLikes = () => (dispatch, getState) => {
+    var likes = getState().pagination.likes
+    console.log(likes.count)
+    if (!likes.isFetching) {
+        if (likes.count && likes.count <= 10 * (likes.page - 1)) {
+            return
+        }
+        return dispatch(fetchLikes({ limit: 10, offset: 10 * (likes.page - 1) }))
     }
 }

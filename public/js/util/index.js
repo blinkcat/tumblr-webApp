@@ -16,7 +16,8 @@ const user = new Schema('users', { idAttribute: 'name' }),
 
 const api = {
     userInfo: { path: `${abPath}/api/userInfo`, schema: { user } },
-    dashboard: { path: `${abPath}/api/dashboard`, schema: { posts: arrayOf(post) } }
+    dashboard: { path: `${abPath}/api/dashboard`, schema: { posts: arrayOf(post) } },
+    likes: { path: `${abPath}/api/likes`, schema: { posts: arrayOf(post) } }
 }
 
 export { api }

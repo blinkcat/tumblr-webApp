@@ -12,6 +12,7 @@ import ContentCreate from 'material-ui/svg-icons/content/create'
 import Avatar from 'material-ui/Avatar'
 import Subheader from 'material-ui/Subheader'
 import Badge from 'material-ui/Badge'
+import hashHistory from 'react-router/lib/hashHistory'
 
 export default class TAppBar extends Component {
     constructor(props) {
@@ -40,8 +41,8 @@ export default class TAppBar extends Component {
                     }
                 >
                     <List>
-                      <ListItem primaryText="首页" leftIcon={<ActionHome />} />
-                      <ListItem primaryText="喜欢" leftIcon={<ActionFavorite />} rightIcon={<Badge badgeContent={likes} primary={true}/>} />
+                      <ListItem primaryText="首页" leftIcon={<ActionHome />} onClick={()=>{hashHistory.push('/dashboard')}} />
+                      <ListItem primaryText="喜欢" leftIcon={<ActionFavorite />} rightIcon={<Badge badgeContent={likes} primary={true}/>} onClick={()=>{hashHistory.push('/likes')}} />
                       <ListItem primaryText="关注" leftIcon={<ActionNoteAdd />} rightIcon={<Badge badgeContent={following} primary={true}/>} />
                       <ListItem primaryText="设置" leftIcon={<ActionSettings />} />
                       <ListItem primaryText="新建帖子" leftIcon={<ContentCreate />} />

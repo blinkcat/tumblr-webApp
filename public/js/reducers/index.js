@@ -4,7 +4,7 @@ import union from 'lodash/union'
 import { combineReducers } from 'redux'
 import * as Actions from '../actions'
 
-const entities = (state = {posts:{}}, action) => {
+const entities = (state = { posts: {} }, action) => {
     if (action.payload && action.payload.entities) {
         return merge({}, state, action.payload.entities)
     }
@@ -35,7 +35,7 @@ const paginate = ({ types }) => {
                     isFetching: false,
                     page: state.page + 1,
                     posts: union(state.posts, action.payload.result.posts),
-                    count: action.payload.count
+                    count: action.payload.result.count
                 })
             case failureType:
                 return merge({}, state, { isFetching: false })
@@ -46,7 +46,9 @@ const paginate = ({ types }) => {
 }
 
 const pagination = combineReducers({
-    dashboard: paginate({ types: [Actions.DASHBOARD_REQUEST, Actions.DASHBOARD_SUCCESS, Actions.DASHBOARD_FAILURE] })
+    dashboard: paginate({ types: [Actions.DASHBOARD_REQUEST, Actions.DASHBOARD_SUCCESS, Actions.DASHBOARD_FAILURE] }),
+    likes: paginate({ types: [Actions.LIKES_REQUEST, Actions.LIKES_SUCCESS, Actions.LIKES_FAILURE] })
+
 })
 
 const rootReducer = combineReducers({ entities, user, pagination })

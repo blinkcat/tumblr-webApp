@@ -10,12 +10,12 @@ class Dashboard extends Component {
     }
 
     componentDidMount() {
-        this.props.loadDashBoard()
+        this.props.posts.length == 0 && this.props.loadDashBoard()
     }
 
     render() {
         const { isFetching, posts } = this.props
-        var dom = isFetching && posts.length == 0 ? <div style={{textAlign:'center'}}><CircularProgress size={60} thickness={7} /></div> : <TList posts={posts} isFetching={isFetching} loadDashBoard={this.props.loadDashBoard} />
+        var dom = isFetching && posts.length == 0 ? <div style={{textAlign:'center',position:'fixed',left:'50%',top:'50%',transform:'translate(-50%,-50%)'}}><CircularProgress size={60} thickness={7} /></div> : <TList posts={posts} isFetching={isFetching} loadData={this.props.loadDashBoard} />
         return (
             dom
         )

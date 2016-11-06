@@ -24,7 +24,7 @@ module.exports = {
             test: /\.scss$/,
             loader: 'style!css?sourceMap!sass?sourceMap'
         }, {
-            test: /\.(gif|jpg|png|woff2)\??.*$/,
+            test: /\.(gif|jpg|png|woff2|eot)\??.*$/,
             loader: 'url?limit=3072'
         }]
     },

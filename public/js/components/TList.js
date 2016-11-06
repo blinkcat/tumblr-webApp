@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import TCard from './TCard'
 import RaisedButton from 'material-ui/RaisedButton'
 import CircularProgress from 'material-ui/CircularProgress'
+// import videojs from 'video.js'
+// import '../../../node_modules/video.js/dist/video-js.css'
 
 export default class TList extends Component {
     constructor(props) {
@@ -11,7 +13,7 @@ export default class TList extends Component {
     render() {
         const style = { 'maxWidth': '540px', margin: '4px auto 10px' },
             posts = this.props.posts
-        var btnDom = this.props.isFetching ? <CircularProgress /> : <RaisedButton label="加载更多" fullWidth={true} onClick={this.props.loadDashBoard} />
+        var btnDom = this.props.isFetching ? <CircularProgress /> : <RaisedButton label="加载更多" fullWidth={true} onClick={this.props.loadData} />
         return (
             <ul>
             {

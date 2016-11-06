@@ -31,7 +31,7 @@ export default class TCard extends Component {
         return (
             <div>
               <CardMedia>
-                  <video poster={curPost.thumbnail_url} preload='none' width="100%">
+                  <video controls poster={curPost.thumbnail_url} preload='none' width="100%">
                     <source src={curPost.video_url} />
                   </video>
               </CardMedia> 
