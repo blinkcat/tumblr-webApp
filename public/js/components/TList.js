@@ -15,7 +15,7 @@ export default class TList extends Component {
             posts = this.props.posts
         var btnDom = this.props.isFetching ? <CircularProgress /> : <RaisedButton label="加载更多" fullWidth={true} onClick={this.props.loadData} />
         return (
-            <ul>
+            <ul style={{paddingTop:'66px'}}>
             {
             	posts.map((post)=>{
             		return (

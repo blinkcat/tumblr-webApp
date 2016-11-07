@@ -1,6 +1,7 @@
 import { CALL_API } from 'redux-api-middleware'
 import { normalize } from 'normalizr'
 import { api } from '../util'
+import fetch from 'isomorphic-fetch'
 
 var credentials = 'omit'
 if (process.env.NODE_ENV == 'production') {
@@ -96,4 +97,43 @@ export const loadLikes = () => (dispatch, getState) => {
         }
         return dispatch(fetchLikes({ limit: 10, offset: 10 * (likes.page - 1) }))
     }
+}
+
+
+export const likePost = ({ id, reblogKey, cb }) => {
+    fetch(api.likePost.path, {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: 'post',
+        body: JSON.stringify({ id, reblogKey }),
+        credentials
+    }).then((res) => {
+        return res.json()
+    }).then((data) => {
+        console.log('likePost', data)
+        cb && cb()
+    }).catch(e => {
+        console.log(e.message)
+    })
+}
+
+export const unlikePost = ({ id, reblogKey, cb }) => {
+    fetch(api.unlikePost.path, {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: 'post',
+        body: JSON.stringify({ id, reblogKey }),
+        credentials
+    }).then((res) => {
+        return res.json()
+    }).then((data) => {
+        console.log('unlikePost', data)
+        cb && cb()
+    }).catch(e => {
+        console.log(e.message)
+    })
 }

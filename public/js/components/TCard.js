@@ -2,9 +2,11 @@ import React, { Component } from 'react'
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card'
 import FlatButton from 'material-ui/FlatButton'
 import IconButton from 'material-ui/IconButton'
-import ActionFavorite from 'material-ui/svg-icons/action/favorite'
-import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border'
+// import ActionFavorite from 'material-ui/svg-icons/action/favorite'
+// import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border'
 import SocialShare from 'material-ui/svg-icons/social/share'
+// import { red900 } from 'material-ui/styles/colors'
+import LikeButton from './LikeButton'
 import merge from 'lodash/merge'
 
 export default class TCard extends Component {
@@ -22,7 +24,9 @@ export default class TCard extends Component {
             date: curPost.date.substring(0, curPost.date.length - 4),
             liked: curPost.liked,
             type: curPost.type,
-            note_count: curPost.note_count
+            note_count: curPost.note_count,
+            reblog_key: curPost.reblog_key,
+            id: curPost.id
         }
     }
 
@@ -92,7 +96,7 @@ export default class TCard extends Component {
 
     render() {
         const baseInfo = this.baseInfo()
-        var likedDom = baseInfo.liked ? <ActionFavorite /> : <ActionFavoriteBorder />
+            // var likedDom = baseInfo.liked ? <ActionFavorite color={red900}/> : <ActionFavoriteBorder />
         return (
             <Card>
               <CardHeader
@@ -103,9 +107,10 @@ export default class TCard extends Component {
               {this.getJSX()}
               <CardActions>
                 <FlatButton label={baseInfo.note_count+' 热度'} />
-                <IconButton tooltip="喜欢" style={{float:'right',width:'36px',height:'36px'}}>
+                {/*<IconButton tooltip="喜欢" style={{float:'right',width:'36px',height:'36px'}}>
                   {likedDom}
-                </IconButton>
+                </IconButton>*/}
+                <LikeButton tooltip="喜欢" style={{float:'right',width:'36px',height:'36px'}} id={baseInfo.id} reblogKey={baseInfo.reblog_key} defaultLiked={baseInfo.liked}/>
                 <IconButton tooltip="分享" style={{float:'right',width:'36px',height:'36px'}}>
                   <SocialShare />
                 </IconButton>

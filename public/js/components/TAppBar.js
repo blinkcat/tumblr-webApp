@@ -34,7 +34,7 @@ export default class TAppBar extends Component {
         avatarSrc = avatarSrc ? `https://api.tumblr.com/v2/blog/${avatarSrc}/avatar` : ''
         return (
             <div>
-                <AppBar title="tumblr" onLeftIconButtonTouchTap={this.handleToggle}/>
+                <AppBar title="tumblr" onLeftIconButtonTouchTap={this.handleToggle} style={{position:'fixed',top:0,left:0}}/>
                 <Drawer docked = { false } width = { 250 } open = { this.state.open }
                     onRequestChange = {
                         (open) => this.setState({ open })

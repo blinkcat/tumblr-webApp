@@ -11,4 +11,6 @@ module.exports = function(app) {
     app.get('/api/userInfo', rquireAuth, adapter.userInfo)
     app.get('/api/dashboard', rquireAuth, adapter.dashboard)
     app.get('/api/likes', rquireAuth, adapter.userLikes)
+    app.post('/api/likePost', rquireAuth, adapter.likePost)
+    app.post('/api/unlikePost', rquireAuth, adapter.unlikePost)
 }

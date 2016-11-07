@@ -141,3 +141,37 @@ exports.userLikes = wrap(function*(req, res) {
     temp.count = userLikes.liked_count
     res.json(temp)
 })
+
+exports.likePost = wrap(function*(req, res) {
+    try {
+        const { id, reblogKey } = req.body
+        console.log('body', req.body)
+        if (!id || !reblogKey) {
+            console.log('need id and reblogKey')
+            res.status(500).json({ error: true, message: 'need id and reblogKey' })
+        } else {
+            var result = yield client.likePost(id, reblogKey)
+        }
+    } catch (e) {
+        console.log('userLikes', e.message)
+        res.status(500).json({ error: true, message: e.message })
+    }
+    res.json(result)
+})
+
+exports.unlikePost = wrap(function*(req, res) {
+    try {
+        const { id, reblogKey } = req.body
+        console.log('body', req.body)
+        if (!id || !reblogKey) {
+            console.log('need id and reblogKey')
+            res.status(500).json({ error: true, message: 'need id and reblogKey' })
+        } else {
+            var result = yield client.unlikePost(id, reblogKey)
+        }
+    } catch (e) {
+        console.log('userLikes', e.message)
+        res.status(500).json({ error: true, message: e.message })
+    }
+    res.json(result)
+})
