@@ -1,4 +1,5 @@
-const tumblr = require('tumblr.js'),
+const path = require('path'),
+    tumblr = require('tumblr.js'),
     co = require('co'),
     wrap = co.wrap,
     ConsumerKey = process.env.ConsumerKey,
@@ -28,11 +29,11 @@ var oa = new OAuth(
     ),
     client = null
 
-exports.isClientOK = function isClientOK() {
+function isClientOK() {
     return !!client
 }
 
-exports.createClient = function createClient({ token, secret }) {
+function createClient({ token, secret }) {
     client = tumblr.createClient({
         credentials: {
             consumer_key: ConsumerKey,
@@ -43,6 +44,9 @@ exports.createClient = function createClient({ token, secret }) {
         returnPromises: true
     })
 }
+exports.isClientOK = isClientOK
+
+exports.createClient = createClient
 
 /**
  * host
@@ -103,7 +107,15 @@ exports.index = function(req, res) {
         //     console.log(e.message)
         //     throw e
         // })
-        res.redirect('http://localhost:3000/')
+        if (process.env.NODE_ENV == 'development') {
+            res.redirect('http://localhost:3000/')
+        } else if (process.env.NODE_ENV == 'production') {
+            res.sendFile('/view/index.html', {
+                root: __dirname + '/..'
+            })
+        } else {
+            res.redirect('http://localhost:8080/')
+        }
     }
 }
 
