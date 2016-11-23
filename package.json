@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build":"webpack -p --progress --config webpack.config.prod.js",
     "start": "cross-env NODE_ENV=development nodemon server",
     "production": "cross-env NODE_ENV=production nodemon server",
-    "dev": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --content-base ./app/view/ --progress --color --hot --inline --port 3000",
+    "dev": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --content-base ./app/view/ --progress --color --hot --inline --port 3000 --config webpack.config.dev.js",
     "mobile": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --content-base ./app/view/ --progress --color --hot --inline --port 3000 --host 0.0.0.0"
   },
   "repository": {

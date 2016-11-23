@@ -13,4 +13,7 @@ module.exports = function(app) {
     app.get('/api/likes', rquireAuth, adapter.userLikes)
     app.post('/api/likePost', rquireAuth, adapter.likePost)
     app.post('/api/unlikePost', rquireAuth, adapter.unlikePost)
+
+    //
+    app.get('*', adapter.index)
 }

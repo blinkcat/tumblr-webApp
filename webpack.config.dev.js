@@ -40,7 +40,8 @@ module.exports = {
     plugins: [
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('development')
-        })
+        }),
+        // new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js')
     ],
     devtool: 'cheap-module-eval-source-map'
         // devtool: 'source-map'

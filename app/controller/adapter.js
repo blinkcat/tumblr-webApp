@@ -100,17 +100,10 @@ exports.index = function(req, res) {
         if (!isClientOK()) {
             createClient({ token, secret })
         }
-        // client.userInfo().then(data => {
-        //     console.log(data)
-        //     res.send('success')
-        // }).catch(e => {
-        //     console.log(e.message)
-        //     throw e
-        // })
         if (process.env.NODE_ENV == 'development') {
             res.redirect('http://localhost:3000/')
         } else if (process.env.NODE_ENV == 'production') {
-            res.sendFile('/view/index.html', {
+            res.sendFile('/view/index-prod.html', {
                 root: __dirname + '/..'
             })
         } else {
