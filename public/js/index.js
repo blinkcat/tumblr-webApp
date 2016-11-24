@@ -12,7 +12,8 @@ import '../sass/index.scss'
 
 injectTapEventPlugin()
 
-const store = configureStore()
+const initialState = window.__INITIAL_STATE__
+const store = configureStore(initialState)
 render(
     <Provider store={store}>
     	{/*<App />*/}

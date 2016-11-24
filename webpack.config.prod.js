@@ -31,21 +31,10 @@ module.exports = {
             loader: 'url?limit=3072'
         }]
     },
-    // resolve: {
-    //     extensions: ['', '.js', '.jsx'],
-    //     alias: {
-    //         'react': path.join(nodeModulesPath, '/react/dist/react'),
-    //         'react-dom': path.join(nodeModulesPath, '/react-dom/dist/react-dom'),
-    //         'redux': path.join(nodeModulesPath, '/redux/dist/redux'),
-    //         'react-redux': path.join(nodeModulesPath, '/react-redux/dist/react-redux')
-    //     }
-    // },
     plugins: [
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify('production') //JSON.stringify('development')
+            'process.env.NODE_ENV': JSON.stringify('production')
         }),
         new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js')
-    ],
-    //devtool: 'cheap-module-eval-source-map'
-    // devtool: 'source-map'
+    ]
 }

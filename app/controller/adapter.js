@@ -1,6 +1,11 @@
 const path = require('path'),
     tumblr = require('tumblr.js'),
     co = require('co'),
+    renderToString = require('react-dom/server'),
+    { RouterContext, match } = require('react-router'),
+    { Provider } = require('react-redux'),
+    routes = require('../../public/js/routers'),
+    configureStore = require('../../public/js/store'),
     wrap = co.wrap,
     ConsumerKey = process.env.ConsumerKey,
     ConsumerSecret = process.env.ConsumerSecret,
@@ -103,8 +108,28 @@ exports.index = function(req, res) {
         if (process.env.NODE_ENV == 'development') {
             res.redirect('http://localhost:3000/')
         } else if (process.env.NODE_ENV == 'production') {
-            res.sendFile('/view/index-prod.html', {
-                root: __dirname + '/..'
+            // res.sendFile('/view/index-prod.html', {
+            //     root: __dirname + '/..'
+            // })
+            Promise.all([client.userInfo(), client.userDashboard({ limit: 10 })])
+            .then(()=>{
+                
+            })
+            match({ router, location: req.url }, (err, redirectLocation, renderProps) => {
+                if (err) {
+                    res.status.send(err.message)
+                } else if (redirectLocation) {
+                    res.redirect(302, redirectLocation.pathname + redirectLocation.search)
+                } else if (renderProps) {
+                    res.render('index-prod.html', {
+                        html: renderToString(
+                            <Provider store={store}>
+                                <Router history={browserHistory} routes={routes}/>
+                            </Provider>
+                        ),
+                        initialState: {}
+                    })
+                }
             })
         } else {
             res.redirect('http://localhost:8080/')

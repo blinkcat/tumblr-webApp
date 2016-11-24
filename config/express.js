@@ -5,12 +5,16 @@ const express = require('express'),
     cookieParser = require('cookie-parser'),
     session = require('express-session'),
     bodyParser = require('body-parser'),
+    nunjucks = require('nunjucks'),
     secret = process.env.secret || 'blinkcat'
 
 module.exports = function(app) {
     //添加中间件 
     app.use(compression())
     app.use(express.static(path.join(__dirname, '..')))
+    nunjucks.configure('app/views', {
+        express: app
+    })
     if (process.env.NODE_ENV == 'development') {
         var corsOptions = {
                 origin: ['http://localhost:3000', 'http://192.168.1.101:3000'],
