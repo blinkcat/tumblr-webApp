@@ -5,7 +5,7 @@ var abPath = '',
 if (curEnv == 'development') {
     abPath = 'http://localhost:8080' //'http://192.168.1.101:8080'
 } else if (curEnv == 'production') {
-    abPath = ''
+    abPath = 'http://localhost:8080'
 } else {
     abPath = ''
 }

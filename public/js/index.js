@@ -3,7 +3,7 @@ import { render } from 'react-dom'
 import configureStore from './store'
 import { Provider } from 'react-redux'
 import App from './containers/App'
-import hashHistory from 'react-router/lib/hashHistory'
+import browserHistory from 'react-router/lib/browserHistory'
 import Router from 'react-router/lib/Router'
 import routes from './routes'
 import injectTapEventPlugin from 'react-tap-event-plugin'
@@ -16,7 +16,7 @@ const store = configureStore()
 render(
     <Provider store={store}>
     	{/*<App />*/}
-    	<Router history={hashHistory} routes={routes}/>
+    	<Router history={browserHistory} routes={routes}/>
     </Provider>,
     document.getElementById('app')
 )

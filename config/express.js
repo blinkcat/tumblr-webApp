@@ -1,4 +1,6 @@
 const express = require('express'),
+    path = require('path'),
+    compression = require('compression'),
     cors = require('cors'),
     cookieParser = require('cookie-parser'),
     session = require('express-session'),
@@ -7,6 +9,8 @@ const express = require('express'),
 
 module.exports = function(app) {
     //添加中间件 
+    app.use(compression())
+    app.use(express.static(path.join(__dirname, '..')))
     if (process.env.NODE_ENV == 'development') {
         var corsOptions = {
                 origin: ['http://localhost:3000', 'http://192.168.1.101:3000'],
