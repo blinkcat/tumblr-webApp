@@ -1,3 +1,7 @@
+/**
+ *@file OAUTH 和 api
+ */
+
 const path = require('path'),
     tumblr = require('tumblr.js'),
     co = require('co'),
@@ -85,7 +89,6 @@ exports.handleCb = function(req, res, next) {
                 req.secret.secret = secret
                 res.cookie('token', token, { httpOnly: true, signed: true, maxAge: 30 * 24 * 60 * 60 * 1000 })
                 res.cookie('secret', secret, { httpOnly: true, signed: true, maxAge: 30 * 24 * 60 * 60 * 1000 })
-                console.log(`token: ${token} | secret: ${secret}`)
                 res.redirect('/')
             }
         })
@@ -103,9 +106,7 @@ exports.index = function(req, res) {
         if (process.env.NODE_ENV == 'development') {
             res.redirect('http://localhost:3000/')
         } else if (process.env.NODE_ENV == 'production') {
-            res.sendFile('/view/index-prod.html', {
-                root: __dirname + '/..'
-            })
+            res.redirect('/dashboard')
         } else {
             res.redirect('http://localhost:8080/')
         }
