@@ -3,5 +3,5 @@
 *.bat
 npm-debug.log
 npm-debug.log.*
-bundle.js
-vendor.js
+./bundle.js
+./vendor.js

@@ -1,15 +1,16 @@
 var path = require('path'),
     nodeModulesPath = path.join(__dirname, '/node_modules/'),
     webpack = require('webpack')
+    // ExtractTextPlugin = require("extract-text-webpack-plugin")
 
 module.exports = {
     entry: {
-        app: './public/js/index.js',
+        app: './client/js/index.js',
         vendor: ['react']
     },
     output: {
         filename: 'bundle.js',
-        path: __dirname
+        path: __dirname + '/build'
     },
     module: {
         noParse: [path.join(nodeModulesPath, '/react/dist/react')],
