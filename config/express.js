@@ -11,6 +11,48 @@ const express = require('express'),
 module.exports = function(app) {
     //添加中间件 
     app.use(compression())
+    if (process.env.NODE_ENV == 'development') {
+        var webpackMiddleware = require('webpack-dev-middleware'),
+            webpack = require('webpack'),
+            devConfig = {
+                entry: './client/js/index.js',
+                output: {
+                    filename: 'bundle.js',
+                    path: __dirname
+                },
+                module: {
+                    noParse: [path.join(nodeModulesPath, '/react/dist/react')],
+                    loaders: [{
+                        test: /\.jsx?$/,
+                        loader: 'babel-loader',
+                        exclude: /node_modules/,
+                        query: {
+                            presets: ['react', 'es2015']
+                        }
+                    }, {
+                        test: /\.css$/,
+                        loader: 'style!css?sourceMap'
+                    }, {
+                        test: /\.scss$/,
+                        loader: 'style!css?sourceMap!sass?sourceMap'
+                    }, {
+                        test: /\.(gif|jpg|png|woff2|eot)\??.*$/,
+                        loader: 'url?limit=3072'
+                    }]
+                },
+                plugins: [
+                    new webpack.DefinePlugin({
+                        'process.env.NODE_ENV': JSON.stringify('development')
+                    }),
+                    new webpack.optimize.OccurrenceOrderPlugin(),
+                    new webpack.HotModuleReplacementPlugin()
+                ],
+                devtool: 'cheap-module-eval-source-map'
+            },
+            app.use(webpackMiddleware(webpack(devConfig), {
+                serverSideRender: true
+            }))
+    }
     app.use(express.static(path.join(__dirname, '../build')))
     nunjucks.configure('app/view', {
         express: app

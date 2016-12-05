@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack -p --progress --config webpack.config.prod.js",
+    "build:prod": "webpack -p --progress --config webpack.config.prod.js",
+    "build:dev": "webpack -p --progress --config webpack.config.dev.js",
     "start": "cross-env NODE_ENV=development nodemon server",
     "production": "cross-env NODE_ENV=production nodemon server",
     "dev": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --content-base ./app/view/ --progress --color --hot --inline --port 3000 --config webpack.config.dev.js",
-    "mobile": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --content-base ./app/view/ --progress --color --hot --inline --port 3000 --host 0.0.0.0"
+    "mobile": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --content-base ./app/view/ --progress --color --hot --inline --port 3000 --config webpack.config.dev.js --host 0.0.0.0"
   },
   "repository": {
     "type": "git",
@@ -61,6 +62,8 @@
     "node-sass": "^3.10.1",
     "nodemon": "^1.11.0",
     "redux-logger": "^2.7.4",
-    "webpack-dev-server": "^1.16.2"
+    "webpack-dev-middleware": "^1.8.4",
+    "webpack-dev-server": "^1.16.2",
+    "webpack-hot-middleware": "^2.13.2"
   }
 }
