@@ -8,14 +8,8 @@ const path = require('path'),
     wrap = co.wrap,
     ConsumerKey = process.env.ConsumerKey,
     ConsumerSecret = process.env.ConsumerSecret,
-    callbackURL = process.env.callbackURL || '',
+    callbackURL = require('../../config').callbackURL,
     OAuth = require('oauth').OAuth
-    // client = tumblr.createClient({
-    //     consumer_key: ConsumerKey,
-    //     consumer_secret: ConsumerSecret,
-    //     token: '',
-    //     token_secret: ''
-    // })
 
 // Request-token URL   https://www.tumblr.com/oauth/request_token
 // Authorize URL   https://www.tumblr.com/oauth/authorize
@@ -67,17 +61,12 @@ exports.login = function(req, res, next) {
             console.log(`token: ${token} | secret: ${secret}`)
             req.session.requestToken = token
             req.session.requestTokenSecret = secret
-                // res.set('Content-Type', 'text/html')
-                // res.status(200).send(`<a href='https://www.tumblr.com/oauth/authorize?oauth_token=${token}'>login tumblr</a>`)
-
             res.redirect(`https://www.tumblr.com/oauth/authorize?oauth_token=${token}`)
         }
     })
 }
 
 exports.handleCb = function(req, res, next) {
-    console.log(`oauth_token: ${req.query.oauth_token} | oauth_verifier: ${req.query.oauth_verifier}`)
-    console.log(`session token: ${req.session.requestToken} | session secret: ${req.session.requestTokenSecret}`)
     if (!req.session.requestToken || !req.session.requestTokenSecret) {
         next(Error('missing session information'))
     } else {
@@ -85,8 +74,6 @@ exports.handleCb = function(req, res, next) {
             if (err) {
                 next(Error('getOAuthAccessToken failed'))
             } else {
-                req.session.token = token
-                req.secret.secret = secret
                 res.cookie('token', token, { httpOnly: true, signed: true, maxAge: 30 * 24 * 60 * 60 * 1000 })
                 res.cookie('secret', secret, { httpOnly: true, signed: true, maxAge: 30 * 24 * 60 * 60 * 1000 })
                 res.redirect('/')
@@ -104,7 +91,7 @@ exports.index = function(req, res) {
             createClient({ token, secret })
         }
         if (process.env.NODE_ENV == 'development') {
-            res.redirect('http://localhost:3000/')
+            res.render('index.html')
         } else if (process.env.NODE_ENV == 'production') {
             res.redirect('/dashboard')
         } else {

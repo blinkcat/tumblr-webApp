@@ -42,6 +42,8 @@ module.exports = {
             'process.env.NODE_ENV': JSON.stringify('development')
         }),
         // new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js')
+        new webpack.optimize.OccurrenceOrderPlugin(),
+        new webpack.HotModuleReplacementPlugin()
     ],
     devtool: 'cheap-module-eval-source-map'
         // devtool: 'source-map'

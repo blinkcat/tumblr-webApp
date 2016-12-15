@@ -9,8 +9,8 @@
     "build:dev": "webpack -p --progress --config webpack.config.dev.js",
     "start": "cross-env NODE_ENV=development nodemon server",
     "production": "cross-env NODE_ENV=production nodemon server",
-    "dev": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --content-base ./app/view/ --progress --color --hot --inline --port 3000 --config webpack.config.dev.js",
-    "mobile": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --content-base ./app/view/ --progress --color --hot --inline --port 3000 --config webpack.config.dev.js --host 0.0.0.0"
+    "dev:webpack-dev-server": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --content-base ./app/view/ --progress --color --hot --inline --port 3000 --config webpack.config.dev.js",
+    "dev:mobile": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --content-base ./app/view/ --progress --color --hot --inline --port 3000 --config webpack.config.dev.js --host 0.0.0.0"
   },
   "repository": {
     "type": "git",
@@ -58,7 +58,6 @@
   "devDependencies": {
     "babel-polyfill": "^6.16.0",
     "babel-register": "^6.18.0",
-    "cors": "^2.8.1",
     "node-sass": "^3.10.1",
     "nodemon": "^1.11.0",
     "redux-logger": "^2.7.4",

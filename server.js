@@ -1,5 +1,7 @@
-require('babel-polyfill')
-require('babel-register')
+if (process.env.NODE_ENV == 'development') {
+    require('babel-polyfill')
+    require('babel-register')
+}
 require('dotenv').config()
 
 const express = require('express'),
