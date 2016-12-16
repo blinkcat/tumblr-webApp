@@ -1,4 +1,3 @@
-import * as ActionTypes from '../actions'
 import merge from 'lodash/merge'
 import union from 'lodash/union'
 import { combineReducers } from 'redux'

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { loadUserInfo } from '../actions'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import TAppBar from '../components/TAppBar'
 
@@ -10,7 +11,7 @@ class App extends Component {
     }
 
     componentDidMount() {
-        this.props.loadUserInfo()
+        !this.props.user && this.props.loadUserInfo()
     }
 
     render() {

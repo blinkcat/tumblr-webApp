@@ -5,7 +5,7 @@ var path = require('path'),
 
 module.exports = {
     entry: {
-        app: './client/js/index.js',
+        app: './client/index.js',
         vendor: ['react']
     },
     output: {

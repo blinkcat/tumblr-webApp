@@ -3,7 +3,7 @@ import { Schema, arrayOf } from 'normalizr'
 var abPath = '',
     curEnv = process.env.NODE_ENV
 if (curEnv == 'development') {
-    abPath = '' //'http://192.168.1.101:8080'
+    abPath = 'http://localhost:8080'
 } else if (curEnv == 'production') {
     abPath = 'http://localhost:8080'
 } else {

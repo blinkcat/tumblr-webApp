@@ -9,16 +9,17 @@ const express = require('express'),
 
 module.exports = function(app) {
     //添加中间件 
-    app.use(compression())
     if (process.env.NODE_ENV == 'development') {
         var webpackMiddleware = require('webpack-dev-middleware'),
             webpack = require('webpack')
         app.use(webpackMiddleware(webpack(require('../webpack.config.dev')), {
-            // serverSideRender: true
+            serverSideRender: true,
             stats: {
                 colors: true
             }
         }))
+    } else {
+        app.use(compression())
     }
     app.use(express.static(path.join(__dirname, '../build')))
     nunjucks.configure('app/view', {

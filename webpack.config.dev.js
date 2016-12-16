@@ -3,7 +3,7 @@ var path = require('path'),
     webpack = require('webpack')
 
 module.exports = {
-    entry: './client/js/index.js',
+    entry: './client/index.js',
     output: {
         filename: 'bundle.js',
         path: __dirname
