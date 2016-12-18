@@ -10,6 +10,7 @@ import { loadUserInfo, loadDashBoard, loadLikes } from '../../client/actions'
 import { isClientOK, createClient } from './adapter'
 
 exports.index = function(req, res) {
+    console.log('headers', req.headers)
     const store = configureStore()
     const { token, secret } = req.signedCookies
     if (!token || !secret) {
@@ -39,13 +40,14 @@ exports.index = function(req, res) {
                         res.render('index.html', {
                             html,
                             initialState: JSON.stringify(store.getState()),
-                            // css: assetsByChunkName.main
-                            //     .filter(path => path.endsWith('.css'))
-                            //     .map(path => `<link rel="stylesheet" href="${path}" />`),
-                            // js: assetsByChunkName.main
-                            //     .filter(path => path.endsWith('.js'))
-                            //     .map(path => `<script src="${path}" />`)
-                            js: `<script src="${assetsByChunkName.main}"></script>`
+                            css: assetsByChunkName.main
+                                .filter(path => path.endsWith('.css'))
+                                .map(path => `<link rel="stylesheet" href="${path}" />`)
+                                .join(''),
+                            js: assetsByChunkName.main
+                                .filter(path => path.endsWith('.js'))
+                                .map(path => `<script src="${path}" /></script>`)
+                                .join('')
                         })
                     }).catch((err) => {
                         res.status(500).end(`Internal Server Error ${err}`)

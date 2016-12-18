@@ -1,3 +1,3 @@
 {
-    "watch": ["app", "config", "server.js"]
+    "watch": ["app", "config", "server.js", "webpack.config.dev.js"]
 }

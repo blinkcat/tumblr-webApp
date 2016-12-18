@@ -58,9 +58,11 @@
   "devDependencies": {
     "babel-polyfill": "^6.16.0",
     "babel-register": "^6.18.0",
+    "connect-livereload": "^0.6.0",
     "node-sass": "^3.10.1",
     "nodemon": "^1.11.0",
     "redux-logger": "^2.7.4",
+    "tiny-lr": "^1.0.3",
     "webpack-dev-middleware": "^1.8.4",
     "webpack-dev-server": "^1.16.2",
     "webpack-hot-middleware": "^2.13.2"

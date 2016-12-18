@@ -1,9 +1,14 @@
 var path = require('path'),
     nodeModulesPath = path.join(__dirname, '/node_modules/'),
-    webpack = require('webpack')
+    webpack = require('webpack'),
+    ExtractTextPlugin = require("extract-text-webpack-plugin"),
+    cssExtractor = new ExtractTextPlugin('index.css')
 
 module.exports = {
-    entry: './client/index.js',
+    entry: [
+        'webpack-hot-middleware/client',
+        './client/index.js'
+    ],
     output: {
         filename: 'bundle.js',
         path: __dirname
@@ -18,14 +23,14 @@ module.exports = {
                 presets: ['react', 'es2015']
             }
         }, {
-            test: /\.css$/,
-            loader: 'style!css?sourceMap'
-        }, {
-            test: /\.scss$/,
-            loader: 'style!css?sourceMap!sass?sourceMap'
-        }, {
             test: /\.(gif|jpg|png|woff2|eot)\??.*$/,
             loader: 'url?limit=3072'
+        }, {
+            test: /\.scss$/,
+            loader: cssExtractor.extract('style-loader', 'css-loader?sourceMap', 'sass-loader?sourceMap')
+        }, {
+            test: /\.css$/,
+            loader: cssExtractor.extract('style-loader', 'css-loader')
         }]
     },
     // resolve: {
@@ -41,6 +46,7 @@ module.exports = {
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('development')
         }),
+        cssExtractor,
         // new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js')
         new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.HotModuleReplacementPlugin()

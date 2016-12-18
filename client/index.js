@@ -11,6 +11,7 @@ import './sass/index.scss'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
 injectTapEventPlugin()
+
 const initialState = window.__INITIAL_STATE__
 const store = configureStore(initialState)
 render(

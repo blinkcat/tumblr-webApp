@@ -9,18 +9,6 @@ const express = require('express'),
 
 module.exports = function(app) {
     //添加中间件 
-    if (process.env.NODE_ENV == 'development') {
-        var webpackMiddleware = require('webpack-dev-middleware'),
-            webpack = require('webpack')
-        app.use(webpackMiddleware(webpack(require('../webpack.config.dev')), {
-            serverSideRender: true,
-            stats: {
-                colors: true
-            }
-        }))
-    } else {
-        app.use(compression())
-    }
     app.use(express.static(path.join(__dirname, '../build')))
     nunjucks.configure('app/view', {
         express: app
@@ -33,6 +21,23 @@ module.exports = function(app) {
     }))
     app.use(bodyParser.json())
     app.use(bodyParser.urlencoded({ extended: true }))
+    if (process.env.NODE_ENV == 'development') {
+        var webpackMiddleware = require('webpack-dev-middleware'),
+            webpack = require('webpack'),
+            tinylr = require('tiny-lr')
+        app.use(webpackMiddleware(webpack(require('../webpack.config.dev')), {
+            serverSideRender: true,
+            stats: {
+                colors: true
+            }
+        }))
+
+        app.use(require('connect-livereload')({
+            port: 8080
+        })).use(tinylr.middleware({ app }))
+
+    }
+    app.use(compression())
     app.use(function(err, req, res, next) {
         console.log('err', err)
         res.status(500).send('test').end()
