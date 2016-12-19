@@ -2,6 +2,7 @@ var path = require('path'),
     nodeModulesPath = path.join(__dirname, '/node_modules/'),
     webpack = require('webpack'),
     ExtractTextPlugin = require("extract-text-webpack-plugin"),
+    HtmlWebpackPlugin = require('html-webpack-plugin'),
     cssExtractor = new ExtractTextPlugin('index.[contenthash].css')
 
 module.exports = {
@@ -27,16 +28,24 @@ module.exports = {
             loader: 'url?limit=3072'
         }, {
             test: /\.scss$/,
-            loader: cssExtractor.extract('style-loader', 'css-loader?sourceMap', 'sass-loader?sourceMap')
+            loader: cssExtractor.extract('style-loader', 'css-loader', 'sass-loader')
         }, {
             test: /\.css$/,
             loader: cssExtractor.extract('style-loader', 'css-loader')
+        }, {
+            test: /\.html$/,
+            loader: 'nunjucks'
         }]
     },
     plugins: [
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production')
         }),
-        new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js')
+        new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js'),
+        cssExtractor,
+        new HtmlWebpackPlugin({
+            title: 'tumblr',
+            template: 'app/view/index-prod.html'
+        })
     ]
 }

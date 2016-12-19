@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:prod": "webpack -p --progress --config webpack.config.prod.js",
+    "build": "webpack -p --progress --config webpack.config.prod.js",
     "build:dev": "webpack -p --progress --config webpack.config.dev.js",
     "start": "cross-env NODE_ENV=development nodemon server",
     "production": "cross-env NODE_ENV=production nodemon server",
@@ -59,6 +59,7 @@
     "babel-polyfill": "^6.16.0",
     "babel-register": "^6.18.0",
     "connect-livereload": "^0.6.0",
+    "html-webpack-plugin": "^2.24.1",
     "node-sass": "^3.10.1",
     "nodemon": "^1.11.0",
     "redux-logger": "^2.7.4",
