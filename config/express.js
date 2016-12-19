@@ -24,17 +24,21 @@ module.exports = function(app) {
     if (process.env.NODE_ENV == 'development') {
         var webpackMiddleware = require('webpack-dev-middleware'),
             webpack = require('webpack'),
-            tinylr = require('tiny-lr')
-        app.use(webpackMiddleware(webpack(require('../webpack.config.dev')), {
+            tinylr = require('tiny-lr'),
+            webpackConfig = require('../webpack.config.dev'),
+            compiler = webpack(webpackConfig)
+
+        app.use(webpackMiddleware(compiler, {
+            publicPath: webpackConfig.output.publicPath,
             serverSideRender: true,
             stats: {
                 colors: true
             }
-        }))
+        })).use(require("webpack-hot-middleware")(compiler))
 
-        app.use(require('connect-livereload')({
-            port: 8080
-        })).use(tinylr.middleware({ app }))
+        // app.use(require('connect-livereload')({
+        //     port: 8080
+        // })).use(tinylr.middleware({ app }))
 
     }
     app.use(compression())

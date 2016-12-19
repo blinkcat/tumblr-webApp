@@ -11,7 +11,8 @@ module.exports = {
     ],
     output: {
         filename: 'bundle.js',
-        path: __dirname
+        path: __dirname,
+        publicPath: '/'
     },
     module: {
         noParse: [path.join(nodeModulesPath, '/react/dist/react')],
@@ -49,7 +50,8 @@ module.exports = {
         cssExtractor,
         // new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js')
         new webpack.optimize.OccurrenceOrderPlugin(),
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoErrorsPlugin()
     ],
     devtool: 'cheap-module-eval-source-map'
         // devtool: 'source-map'
