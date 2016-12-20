@@ -90,7 +90,6 @@ const fetchLikes = ({ limit, offset }) => ({
 
 export const loadLikes = () => (dispatch, getState) => {
     var likes = getState().pagination.likes
-    console.log(likes.count)
     if (!likes.isFetching) {
         if (likes.count && likes.count <= 10 * (likes.page - 1)) {
             return
@@ -112,7 +111,6 @@ export const likePost = ({ id, reblogKey, cb }) => {
     }).then((res) => {
         return res.json()
     }).then((data) => {
-        console.log('likePost', data)
         cb && cb()
     }).catch(e => {
         console.log(e.message)
@@ -131,7 +129,6 @@ export const unlikePost = ({ id, reblogKey, cb }) => {
     }).then((res) => {
         return res.json()
     }).then((data) => {
-        console.log('unlikePost', data)
         cb && cb()
     }).catch(e => {
         console.log(e.message)

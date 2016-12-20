@@ -3,7 +3,7 @@ var path = require('path'),
     webpack = require('webpack'),
     ExtractTextPlugin = require("extract-text-webpack-plugin"),
     HtmlWebpackPlugin = require('html-webpack-plugin'),
-    cssExtractor = new ExtractTextPlugin('index.[contenthash].css')
+    cssExtractor = new ExtractTextPlugin('index.css')
 
 module.exports = {
     entry: {
@@ -11,7 +11,7 @@ module.exports = {
         vendor: ['react']
     },
     output: {
-        filename: 'bundle.[hash].js',
+        filename: 'bundle.js',
         path: __dirname + '/build'
     },
     module: {

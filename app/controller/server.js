@@ -10,7 +10,6 @@ import { loadUserInfo, loadDashBoard, loadLikes } from '../../client/actions'
 import { isClientOK, createClient } from './adapter'
 
 exports.index = function(req, res) {
-    console.log('headers', req.headers)
     const store = configureStore()
     const { token, secret } = req.signedCookies
     if (!token || !secret) {
@@ -28,8 +27,6 @@ exports.index = function(req, res) {
             } else if (redirectLocation) {
                 res.redirect(redirectLocation.pathname + redirectLocation.search)
             } else if (renderProps) {
-                const assetsByChunkName = res.locals.webpackStats.toJson().assetsByChunkName
-                console.log('assetsByChunkName', assetsByChunkName)
                 Promise.all([store.dispatch(loadUserInfo()), store.dispatch(loadDashBoard())])
                     .then(() => {
                         const html = renderToString(
@@ -37,18 +34,27 @@ exports.index = function(req, res) {
                                 <RouterContext {...renderProps} />
                             </Provider>
                         )
-                        res.render('index.html', {
-                            html,
-                            initialState: JSON.stringify(store.getState()),
-                            css: assetsByChunkName.main
-                                .filter(path => path.endsWith('.css'))
-                                .map(path => `<link rel="stylesheet" href="${path}" />`)
-                                .join(''),
-                            js: assetsByChunkName.main
-                                .filter(path => path.endsWith('.js'))
-                                .map(path => `<script src="${path}" /></script>`)
-                                .join('')
-                        })
+                        if (process.env.NODE_ENV == 'development') {
+                            const assetsByChunkName = res.locals.webpackStats.toJson().assetsByChunkName
+                            res.render('index.html', {
+                                html,
+                                initialState: JSON.stringify(store.getState()),
+                                css: assetsByChunkName.main
+                                    .filter(path => path.endsWith('.css'))
+                                    .map(path => `<link rel="stylesheet" href="${path}" />`)
+                                    .join(''),
+                                js: assetsByChunkName.main
+                                    .filter(path => path.endsWith('.js'))
+                                    .map(path => `<script src="${path}" /></script>`)
+                                    .join('')
+                            })
+                        } else {
+                            res.render('index-prod.html', {
+                                title: 'tumblr',
+                                html,
+                                initialState: JSON.stringify(store.getState())
+                            })
+                        }
                     }).catch((err) => {
                         res.status(500).end(`Internal Server Error ${err}`)
                     })

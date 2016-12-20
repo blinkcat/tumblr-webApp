@@ -15,7 +15,6 @@ class App extends Component {
     }
 
     render() {
-        console.log('App is changed')
         return (
             <MuiThemeProvider>
             <div>
