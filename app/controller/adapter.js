@@ -91,7 +91,7 @@ exports.index = function(req, res) {
             createClient({ token, secret })
         }
         if (process.env.NODE_ENV == 'development') {
-            res.render('index.html')
+            res.render('test.html')
         } else if (process.env.NODE_ENV == 'production') {
             res.redirect('/dashboard')
         } else {

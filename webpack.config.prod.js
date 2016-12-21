@@ -2,8 +2,9 @@ var path = require('path'),
     nodeModulesPath = path.join(__dirname, '/node_modules/'),
     webpack = require('webpack'),
     ExtractTextPlugin = require("extract-text-webpack-plugin"),
-    HtmlWebpackPlugin = require('html-webpack-plugin'),
-    cssExtractor = new ExtractTextPlugin('index.css')
+    nunjucksHTML = require('./plugins/nunjucksHTML'),
+    CleanWebpackPlugin = require('clean-webpack-plugin'),
+    cssExtractor = new ExtractTextPlugin('index.[contenthash].css')
 
 module.exports = {
     entry: {
@@ -11,7 +12,7 @@ module.exports = {
         vendor: ['react']
     },
     output: {
-        filename: 'bundle.js',
+        filename: 'bundle.[hash].js',
         path: __dirname + '/build'
     },
     module: {
@@ -32,9 +33,6 @@ module.exports = {
         }, {
             test: /\.css$/,
             loader: cssExtractor.extract('style-loader', 'css-loader')
-        }, {
-            test: /\.html$/,
-            loader: 'nunjucks'
         }]
     },
     plugins: [
@@ -43,9 +41,9 @@ module.exports = {
         }),
         new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js'),
         cssExtractor,
-        new HtmlWebpackPlugin({
-            title: 'tumblr',
-            template: 'app/view/index-prod.html'
+        new nunjucksHTML(),
+        new CleanWebpackPlugin(['build'], {
+            root: '.'
         })
     ]
 }

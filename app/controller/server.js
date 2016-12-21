@@ -36,7 +36,7 @@ exports.index = function(req, res) {
                         )
                         if (process.env.NODE_ENV == 'development') {
                             const assetsByChunkName = res.locals.webpackStats.toJson().assetsByChunkName
-                            res.render('index.html', {
+                            res.render('test.html', {
                                 html,
                                 initialState: JSON.stringify(store.getState()),
                                 css: assetsByChunkName.main
@@ -49,7 +49,7 @@ exports.index = function(req, res) {
                                     .join('')
                             })
                         } else {
-                            res.render('index-prod.html', {
+                            res.render('index.html', {
                                 title: 'tumblr',
                                 html,
                                 initialState: JSON.stringify(store.getState())

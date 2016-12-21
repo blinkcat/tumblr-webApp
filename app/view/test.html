@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>{{title}}</title>
+    <title>ui</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="/index.css">
+    {{css|safe}}
 </head>
 
 <body>
@@ -15,8 +15,7 @@
     <script type="text/javascript">
     	window.__INITIAL_STATE__ = {{initialState|safe}}
     </script>
-    <script type="text/javascript" src='/vendor.js'></script>
-    <script type="text/javascript" src='/bundle.js'></script>
+    {{js|safe}}
 </body>
 
 </html>

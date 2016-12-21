@@ -3,4 +3,3 @@
 *.bat
 npm-debug.log
 npm-debug.log.*
-/build
