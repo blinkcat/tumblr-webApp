@@ -7,7 +7,8 @@ import browserHistory from 'react-router/lib/browserHistory'
 import Router from 'react-router/lib/Router'
 import routes from '../../client/routes'
 import { loadUserInfo, loadDashBoard, loadLikes } from '../../client/actions'
-import { isClientOK, createClient } from './adapter'
+import { isClientReady, createClient } from '../model/tumblr'
+import { refresh } from './api'
 
 exports.index = function(req, res) {
     const store = configureStore()
@@ -15,8 +16,9 @@ exports.index = function(req, res) {
     if (!token || !secret) {
         res.redirect('/login')
     } else {
-        if (!isClientOK()) {
+        if (!isClientReady()) {
             createClient({ token, secret })
+            refresh()
         }
         global.navigator = {
             userAgent: req.headers['user-agent']
@@ -37,6 +39,7 @@ exports.index = function(req, res) {
                         if (process.env.NODE_ENV == 'development') {
                             const assetsByChunkName = res.locals.webpackStats.toJson().assetsByChunkName
                             res.render('test.html', {
+                                title: 'tumblr-webApp',
                                 html,
                                 initialState: JSON.stringify(store.getState()),
                                 css: assetsByChunkName.main
@@ -50,7 +53,7 @@ exports.index = function(req, res) {
                             })
                         } else {
                             res.render('index.html', {
-                                title: 'tumblr',
+                                title: 'tumblr-webApp',
                                 html,
                                 initialState: JSON.stringify(store.getState())
                             })

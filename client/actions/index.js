@@ -2,13 +2,7 @@ import { CALL_API } from 'redux-api-middleware'
 import { normalize } from 'normalizr'
 import { api } from '../util'
 import fetch from 'isomorphic-fetch'
-
-var credentials = 'omit'
-if (process.env.NODE_ENV == 'production') {
-    credentials = 'same-origin'
-} else if (process.env.NODE_ENV == 'development') {
-    credentials = 'include'
-}
+import { credentials } from '../../config'
 
 export const USERINFO_REQUEST = 'USERINFO_REQUEST'
 export const USERINFO_SUCCESS = 'USERINFO_SUCCESS'
@@ -91,13 +85,46 @@ const fetchLikes = ({ limit, offset }) => ({
 export const loadLikes = () => (dispatch, getState) => {
     var likes = getState().pagination.likes
     if (!likes.isFetching) {
-        if (likes.count && likes.count <= 10 * (likes.page - 1)) {
+        if (likes.liked_count && likes.liked_count <= 10 * (likes.page - 1)) {
             return
         }
         return dispatch(fetchLikes({ limit: 10, offset: 10 * (likes.page - 1) }))
     }
 }
 
+export const FOLLOWING_REQUEST = 'FOLLOWING_REQUEST'
+export const FOLLOWING_SUCCESS = 'FOLLOWING_SUCCESS'
+export const FOLLOWING_FAILURE = 'FOLLOWING_FAILURE'
+
+const fetchFollowing = ({ limit, offset }) => ({
+    [CALL_API]: {
+        types: [
+            FOLLOWING_REQUEST, {
+                type: FOLLOWING_SUCCESS,
+                payload: (action, state, res) => {
+                    const contentType = res.headers.get('Content-Type')
+                    if (contentType && ~contentType.indexOf('json')) {
+                        return res.json().then((json) => normalize(json, api.following.schema))
+                    }
+                }
+            },
+            FOLLOWING_FAILURE
+        ],
+        method: 'GET',
+        endpoint: `${api.following.path}?limit=${limit}&offset=${offset}`,
+        credentials
+    }
+})
+
+export const loadFollowing = () => (dispatch, getState) => {
+    var following = getState().pagination.following
+    if (!following.isFetching) {
+        if (following.total_blogs && following.total_blogs <= 10 * (following.page - 1)) {
+            return
+        }
+        return dispatch(fetchFollowing({ limit: 10, offset: 10 * (following.page - 1) }))
+    }
+}
 
 export const likePost = ({ id, reblogKey, cb }) => {
     fetch(api.likePost.path, {

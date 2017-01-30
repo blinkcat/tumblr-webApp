@@ -1,20 +1,23 @@
-var adapter = require('../app/controller/adapter'),
-    { rquireAuth } = require('./middlewares'),
+let api = require('../app/controller/api'),
+    oauth = require('../app/controller/oauth'),
+    { requireAuth } = require('./middlewares'),
     server = require('../app/controller/server')
 
 module.exports = function(app) {
     // oauth
     app.get('/', server.index)
-    app.get('/login', adapter.login)
-    app.get('/callback', adapter.handleCb)
+    app.get('/login', oauth.login)
+    app.get('/callback', oauth.handleCb)
     app.get('/dashboard', server.index)
+    app.get('/likes', server.index)
 
     // api
-    app.get('/api/userInfo', rquireAuth, adapter.userInfo)
-    app.get('/api/dashboard', rquireAuth, adapter.dashboard)
-    app.get('/api/likes', rquireAuth, adapter.userLikes)
-    app.post('/api/likePost', rquireAuth, adapter.likePost)
-    app.post('/api/unlikePost', rquireAuth, adapter.unlikePost)
+    app.get('/api/userInfo', requireAuth, api.userInfo)
+    app.get('/api/dashboard', requireAuth, api.dashboard)
+    app.get('/api/likes', requireAuth, api.userLikes)
+    app.get('/api/following', requireAuth, api.userFollowing)
+    app.post('/api/likePost', requireAuth, api.likePost)
+    app.post('/api/unlikePost', requireAuth, api.unlikePost)
 
-    // app.get('*', adapter.index)
+    // app.get('*', api.index)
 }

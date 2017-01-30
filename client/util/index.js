@@ -1,25 +1,18 @@
 import { Schema, arrayOf } from 'normalizr'
-
-var abPath = '',
-    curEnv = process.env.NODE_ENV
-if (curEnv == 'development') {
-    abPath = 'http://localhost:8080'
-} else if (curEnv == 'production') {
-    abPath = 'http://localhost:8080'
-} else {
-    abPath = ''
-}
+import { apiURL } from '../../config'
 
 //schema
 const user = new Schema('users', { idAttribute: 'name' }),
-    post = new Schema('posts')
+    post = new Schema('posts'),
+    blog = new Schema('blogs')
 
 const api = {
-    userInfo: { path: `${abPath}/api/userInfo`, schema: { user } },
-    dashboard: { path: `${abPath}/api/dashboard`, schema: { posts: arrayOf(post) } },
-    likes: { path: `${abPath}/api/likes`, schema: { posts: arrayOf(post) } },
-    likePost: { path: `${abPath}/api/likePost` },
-    unlikePost: { path: `${abPath}/api/unlikePost` }
+    userInfo: { path: `${apiURL}/api/userInfo`, schema: { user } },
+    dashboard: { path: `${apiURL}/api/dashboard`, schema: { posts: arrayOf(post) } },
+    likes: { path: `${apiURL}/api/likes`, schema: { liked_posts: arrayOf(post) } },
+    following: { path: `${apiURL}/api/following`, schema: { blogs: arrayOf(blog) } },
+    likePost: { path: `${apiURL}/api/likePost` },
+    unlikePost: { path: `${apiURL}/api/unlikePost` }
 }
 
 export { api }

@@ -1,17 +1,15 @@
-var adapter = require('../../app/controller/adapter')
-
-exports.rquireAuth = function(req, res, next) {
+let {
+    isClientReady,
+    createClient
+} = require('../../app/model/tumblr')
+const refresh = require('../../app/controller/api').refresh
+exports.requireAuth = function(req, res, next) {
     const { token, secret } = req.signedCookies
-    if (!adapter.isClientOK()) {
+    if (!isClientReady()) {
         if (token && secret) {
-            try {
-            	console.log('createClient')
-                adapter.createClient({ token, secret })
-                next()
-            } catch (e) {
-                console.log(e.message)
-                res.status(401).json({ error: true, message: 'you have no authorization' })
-            }
+            createClient({ token, secret })
+            refresh()
+            next()
         } else {
             res.status(401).json({ error: true, message: 'you have no authorization' })
         }

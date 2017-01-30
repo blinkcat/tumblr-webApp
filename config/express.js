@@ -25,7 +25,6 @@ module.exports = function(app) {
     if (process.env.NODE_ENV == 'development') {
         var webpackMiddleware = require('webpack-dev-middleware'),
             webpack = require('webpack'),
-            tinylr = require('tiny-lr'),
             webpackConfig = require('../webpack.config.dev'),
             compiler = webpack(webpackConfig)
 

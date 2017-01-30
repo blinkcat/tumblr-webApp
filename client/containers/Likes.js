@@ -24,7 +24,7 @@ class Likes extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        posts: state.pagination.likes.posts.map((cur) => {
+        posts: state.pagination.likes.liked_posts.map((cur) => {
             return state.entities.posts[cur]
         }),
         isFetching: state.pagination.likes.isFetching
