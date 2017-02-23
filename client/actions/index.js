@@ -1,5 +1,7 @@
 import { CALL_API } from 'redux-api-middleware'
 import { normalize } from 'normalizr'
+import set from 'lodash/set'
+import without from 'lodash/without'
 import { api } from '../util'
 import fetch from 'isomorphic-fetch'
 import { credentials } from '../../config'
@@ -61,6 +63,7 @@ export const loadDashBoard = () => (dispatch, getState) => {
 export const LIKES_REQUEST = 'LIKES_REQUEST'
 export const LIKES_SUCCESS = 'LIKES_SUCCESS'
 export const LIKES_FAILURE = 'LIKES_FAILURE'
+export const LIKES_CHANGE = 'LIKES_CHANG'
 
 const fetchLikes = ({ limit, offset }) => ({
     [CALL_API]: {
@@ -119,6 +122,7 @@ const fetchFollowing = ({ limit, offset }) => ({
 export const loadFollowing = () => (dispatch, getState) => {
     var following = getState().pagination.following
     if (!following.isFetching) {
+        console.log('following', following)
         if (following.total_blogs && following.total_blogs <= 10 * (following.page - 1)) {
             return
         }
@@ -126,7 +130,7 @@ export const loadFollowing = () => (dispatch, getState) => {
     }
 }
 
-export const likePost = ({ id, reblogKey, cb }) => {
+export const likePost = ({ id, reblogKey, dispatch, cb }) => {
     fetch(api.likePost.path, {
         headers: {
             'Accept': 'application/json',
@@ -139,12 +143,18 @@ export const likePost = ({ id, reblogKey, cb }) => {
         return res.json()
     }).then((data) => {
         cb && cb()
+        dispatch((dispatch, getState) => {
+            dispatch(set({ type: LIKES_CHANGE },
+                'pagination.likes',
+                getState().pagination.likes.liked_posts.unshift(id)
+            ))
+        })
     }).catch(e => {
         console.log(e.message)
     })
 }
 
-export const unlikePost = ({ id, reblogKey, cb }) => {
+export const unlikePost = ({ id, reblogKey, dispatch, cb }) => {
     fetch(api.unlikePost.path, {
         headers: {
             'Accept': 'application/json',
@@ -157,6 +167,12 @@ export const unlikePost = ({ id, reblogKey, cb }) => {
         return res.json()
     }).then((data) => {
         cb && cb()
+        dispatch((dispatch, getState) => {
+            dispatch(set({ type: LIKES_CHANGE },
+                'pagination.likes',
+                without(getState().pagination.likes.liked_posts, id)
+            ))
+        })
     }).catch(e => {
         console.log(e.message)
     })

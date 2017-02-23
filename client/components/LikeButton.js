@@ -3,9 +3,10 @@ import ActionFavorite from 'material-ui/svg-icons/action/favorite'
 import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border'
 import { red900 } from 'material-ui/styles/colors'
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { likePost, unlikePost } from '../actions'
 
-export default class LikeButton extends Component {
+class LikeButton extends Component {
     constructor(props) {
         super(props)
         this.state = { liked: this.props.defaultLiked }
@@ -31,7 +32,7 @@ export default class LikeButton extends Component {
         if (!id || !reblogKey) {
             return
         }
-        likePost({ id, reblogKey, cb: this.like })
+        likePost({ id, reblogKey, dispatch: this.props.dispatch, cb: this.like })
     }
 
     dounLike() {
@@ -39,7 +40,7 @@ export default class LikeButton extends Component {
         if (!id || !reblogKey) {
             return
         }
-        unlikePost({ id, reblogKey, cb: this.like })
+        unlikePost({ id, reblogKey, dispatch: this.props.dispatch, cb: this.like })
     }
 
     toggle() {
@@ -53,8 +54,10 @@ export default class LikeButton extends Component {
     render() {
         return (
             <IconButton tooltip={this.props.tooltip} style={this.props.style} onClick={this.toggle}>
-        		{this.getDom()}
-			</IconButton>
+                {this.getDom()}
+            </IconButton>
         )
     }
 }
+
+export default connect()(LikeButton)

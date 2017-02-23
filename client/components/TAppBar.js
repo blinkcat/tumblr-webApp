@@ -41,9 +41,9 @@ export default class TAppBar extends Component {
                     }
                 >
                     <List>
-                      <ListItem primaryText="首页" leftIcon={<ActionHome />} onClick={()=>{browserHistory.push('/dashboard')}} />
-                      <ListItem primaryText="喜欢" leftIcon={<ActionFavorite />} rightIcon={<Badge badgeContent={likes} primary={true}/>} onClick={()=>{browserHistory.push('/likes')}} />
-                      <ListItem primaryText="关注" leftIcon={<ActionNoteAdd />} rightIcon={<Badge badgeContent={following} primary={true}/>} />
+                      <ListItem primaryText="首页" leftIcon={<ActionHome />} onTouchTap={()=>{browserHistory.push('/dashboard');this.handleClose()}} />
+                      <ListItem primaryText="喜欢" leftIcon={<ActionFavorite />} rightIcon={<Badge badgeContent={likes} primary={true}/>} onTouchTap={()=>{browserHistory.push('/likes');this.handleClose()}} />
+                      <ListItem primaryText="关注" leftIcon={<ActionNoteAdd />} rightIcon={<Badge badgeContent={following} primary={true}/>} onTouchTap={()=>{browserHistory.push('/following');this.handleClose()}}/>
                       <ListItem primaryText="设置" leftIcon={<ActionSettings />} />
                       <ListItem primaryText="新建帖子" leftIcon={<ContentCreate />} />
                     </List>

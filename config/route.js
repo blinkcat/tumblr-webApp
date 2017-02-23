@@ -10,6 +10,7 @@ module.exports = function(app) {
     app.get('/callback', oauth.handleCb)
     app.get('/dashboard', server.index)
     app.get('/likes', server.index)
+    app.get('/following', server.index)
 
     // api
     app.get('/api/userInfo', requireAuth, api.userInfo)

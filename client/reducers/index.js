@@ -33,8 +33,8 @@ const paginate = ({ types, arrayName = 'posts', countName = 'count' }) => {
                 return merge({}, state, {
                     isFetching: false,
                     page: state.page + 1,
-                    [arrayName]: union(state.posts, action.payload.result[arrayName]),
-                    [countName]: action.payload.result.count
+                    [arrayName]: union(state[arrayName], action.payload.result[arrayName]),
+                    [countName]: action.payload.result[countName]
                 })
             case failureType:
                 return merge({}, state, { isFetching: false })
@@ -60,5 +60,13 @@ const pagination = combineReducers({
     })
 })
 
-const rootReducer = combineReducers({ entities, user, pagination })
+const likesList = (state = [], action) {
+    if (action.type == Actions.LIKES_SUCCESS) {
+        return union(state, action.payload.result.liked_posts)
+    } else {
+        return state
+    }
+}
+
+const rootReducer = combineReducers({ entities, user, pagination, likesList })
 export default rootReducer

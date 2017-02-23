@@ -4,7 +4,7 @@ import { apiURL } from '../../config'
 //schema
 const user = new Schema('users', { idAttribute: 'name' }),
     post = new Schema('posts'),
-    blog = new Schema('blogs')
+    blog = new Schema('blogs', { idAttribute: 'name' })
 
 const api = {
     userInfo: { path: `${apiURL}/api/userInfo`, schema: { user } },
