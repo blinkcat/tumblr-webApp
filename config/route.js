@@ -1,24 +1,30 @@
 let api = require('../app/controller/api'),
     oauth = require('../app/controller/oauth'),
+    server = require('../app/controller/server'),
     { requireAuth } = require('./middlewares'),
-    server = require('../app/controller/server')
+    express = require('express')
 
 module.exports = function(app) {
-    // oauth
-    app.get('/', server.index)
-    app.get('/login', oauth.login)
-    app.get('/callback', oauth.handleCb)
-    app.get('/dashboard', server.index)
-    app.get('/likes', server.index)
-    app.get('/following', server.index)
+    // common router
+    var router = express.Router()
+    router.get('/login', oauth.login)
+    router.get('/callback', oauth.handleCb)
+    router.use(requireAuth)
+    router.get('/', server.index)
+    router.get('/dashboard', server.index)
+    router.get('/likes', server.index)
+    router.get('/following', server.index)
 
-    // api
-    app.get('/api/userInfo', requireAuth, api.userInfo)
-    app.get('/api/dashboard', requireAuth, api.dashboard)
-    app.get('/api/likes', requireAuth, api.userLikes)
-    app.get('/api/following', requireAuth, api.userFollowing)
-    app.post('/api/likePost', requireAuth, api.likePost)
-    app.post('/api/unlikePost', requireAuth, api.unlikePost)
+    // api router
+    var apiRouter = express.Router()
+    apiRouter.use(requireAuth)
+    apiRouter.get('/userInfo', api.userInfo)
+    apiRouter.get('/dashboard', api.dashboard)
+    apiRouter.get('/likes', api.userLikes)
+    apiRouter.get('/following', api.userFollowing)
+    apiRouter.post('/likePost', api.likePost)
+    apiRouter.post('/unlikePost', api.unlikePost)
 
-    // app.get('*', api.index)
+    app.use('/', router)
+    app.use('/api', apiRouter)
 }

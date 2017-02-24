@@ -1,109 +1,87 @@
+/**
+ * 获取tumblr数据，提供接口
+ */
+
 const path = require('path'),
     wrap = require('co').wrap,
+    debug = require('debug')('tumblrWebApp:api'),
     ERROR_CODE = 500
-let {
-    isClientReady,
-    createClient,
-    getClient
-} = require('../model/tumblr')
 
-let client = null
-
-exports.refresh = function() {
-    client = getClient()
-}
-
-exports.index = function(req, res) {
-    const { token, secret } = req.signedCookies
-    if (!token || !secret) {
-        res.redirect('/login')
-    } else {
-        if (!isClientReady()) {
-            client = createClient({ token, secret })
-        }
-        if (process.env.NODE_ENV == 'development') {
-            res.render('test.html')
-        } else if (process.env.NODE_ENV == 'production') {
-            res.redirect('/dashboard')
-        } else {
-            res.redirect('http://localhost:8080/')
-        }
-    }
-}
-
+/**
+ * 通过co.wrap，将generator转成普通函数
+ */
 exports.userInfo = wrap(function*(req, res) {
+    debug('userInfo')
     try {
-        var userInfo = yield client.userInfo()
+        var userInfo = yield res.client.userInfo()
     } catch (e) {
-        console.error('userInfo', e.message)
+        debug('userInfo %s', e.message)
         res.status(ERROR_CODE).json({ error: true, message: e.message })
     }
     res.json(userInfo)
 })
 
 exports.dashboard = wrap(function*(req, res) {
+    debug('dashboard')
     try {
-        var dashboard = yield client.userDashboard(req.query)
+        var dashboard = yield res.client.userDashboard(req.query)
     } catch (e) {
-        console.error('dashboard', e.message)
+        debug('dashboard %s', e.message)
         res.status(ERROR_CODE).json({ error: true, message: e.message })
     }
     res.json(dashboard)
 })
 
 exports.userLikes = wrap(function*(req, res) {
+    debug('userLikes')
     try {
-        var userLikes = yield client.userLikes(req.query)
+        var userLikes = yield res.client.userLikes(req.query)
     } catch (e) {
-        console.error('userLikes', e.message)
+        debug('userLikes %s', e.message)
         res.status(ERROR_CODE).json({ error: true, message: e.message })
     }
-    // var temp = {}
-    // temp.posts = userLikes.liked_posts
-    // temp.count = userLikes.liked_count
-    // res.json(temp)
     res.json(userLikes)
 })
 
 exports.userFollowing = wrap(function*(req, res) {
+    debug('userFollowing')
     try {
-        var userFollowing = yield client.userFollowing(req.query)
+        var userFollowing = yield res.client.userFollowing(req.query)
     } catch (e) {
-        console.error('userFollowing', e.message)
+        debug('userFollowing %s', e.message)
         res.status(ERROR_CODE).json({ error: true, message: e.message })
     }
     res.json(userFollowing)
 })
 
 exports.likePost = wrap(function*(req, res) {
+    debug('likePost')
     try {
         const { id, reblogKey } = req.body
-        console.log('body', req.body)
         if (!id || !reblogKey) {
-            console.log('need id and reblogKey')
             res.status(ERROR_CODE).json({ error: true, message: 'need id and reblogKey' })
         } else {
-            var result = yield client.likePost(id, reblogKey)
+            var result = yield res.client.likePost(id, reblogKey)
         }
     } catch (e) {
-        console.error('userLikes', e.message)
+        debug('likePost %s', e.message)
         res.status(ERROR_CODE).json({ error: true, message: e.message })
     }
     res.json(result)
 })
 
 exports.unlikePost = wrap(function*(req, res) {
+    debug('unlikePost')
     try {
         const { id, reblogKey } = req.body
-        console.log('body', req.body)
         if (!id || !reblogKey) {
-            console.log('need id and reblogKey')
+            debug('unlikePost %s', 'need id and reblogKey')
             res.status(ERROR_CODE).json({ error: true, message: 'need id and reblogKey' })
         } else {
-            var result = yield client.unlikePost(id, reblogKey)
+            var result = yield res.client.unlikePost(id, reblogKey)
         }
     } catch (e) {
-        console.error('userLikes', e.message)
+        debug('unlikePost %s', e.message)
         res.status(ERROR_CODE).json({ error: true, message: e.message })
     }
     res.json(result)

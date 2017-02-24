@@ -60,13 +60,5 @@ const pagination = combineReducers({
     })
 })
 
-const likesList = (state = [], action) {
-    if (action.type == Actions.LIKES_SUCCESS) {
-        return union(state, action.payload.result.liked_posts)
-    } else {
-        return state
-    }
-}
-
-const rootReducer = combineReducers({ entities, user, pagination, likesList })
+const rootReducer = combineReducers({ entities, user, pagination })
 export default rootReducer

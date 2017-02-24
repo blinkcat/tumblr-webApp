@@ -1,5 +1,5 @@
 /**
- *  @file 提供tumblr数据
+ *  创建tumblr client
  */
 
 const tumblr = require('tumblr.js'),

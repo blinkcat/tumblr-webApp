@@ -37,7 +37,6 @@ module.exports = function(app) {
         })).use(require("webpack-hot-middleware")(compiler))
     }
     app.use(function(err, req, res, next) {
-        console.log('err', err)
-        res.status(500).send('test').end()
+        res.status(500).send(err).end()
     })
 }

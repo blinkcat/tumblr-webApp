@@ -13,7 +13,8 @@ const OAuth = require('oauth').OAuth,
         '1.0A',
         callbackURL,
         'HMAC-SHA1'
-    )
+    ),
+    debug = require('debug')('tumblrWebApp:oauth')
 
 /**
  * host
@@ -23,9 +24,10 @@ const OAuth = require('oauth').OAuth,
  * 66.6.32.4   www.tumblr.com
  */
 exports.login = function(req, res, next) {
+    debug('login')
     oa.getOAuthRequestToken(function(err, token, secret) {
         if (err) {
-            console.error(`getOAuthRequestToken ${err.message}`)
+            debug(`getOAuthRequestToken ${err.message}`)
             next(err)
         } else {
             req.session.requestToken = token
@@ -36,13 +38,14 @@ exports.login = function(req, res, next) {
 }
 
 exports.handleCb = function(req, res, next) {
+    debug('callback')
     if (!req.session.requestToken || !req.session.requestTokenSecret) {
-        console.error('missing session information')
+        debug('missing session information')
         next(Error('missing session information'))
     } else {
         oa.getOAuthAccessToken(req.query.oauth_token, req.session.requestTokenSecret, req.query.oauth_verifier, function(err, token, secret) {
             if (err) {
-                console.error('getOAuthAccessToken failed')
+                debug('getOAuthAccessToken failed')
                 next(Error('getOAuthAccessToken failed'))
             } else {
                 res.cookie('token', token, { httpOnly: true, signed: true, maxAge: 30 * 24 * 60 * 60 * 1000 })

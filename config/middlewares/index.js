@@ -1,19 +1,28 @@
 let {
     isClientReady,
-    createClient
+    createClient,
+    getClient
 } = require('../../app/model/tumblr')
-const refresh = require('../../app/controller/api').refresh
+
 exports.requireAuth = function(req, res, next) {
     const { token, secret } = req.signedCookies
-    if (!isClientReady()) {
-        if (token && secret) {
-            createClient({ token, secret })
-            refresh()
-            next()
+    try {
+        if (!isClientReady()) {
+            if (token && secret) {
+                res.client = createClient({ token, secret })
+                next()
+            } else {
+                if (req.xhr) {
+                    res.status(401).json({ error: true, message: 'you have no authorization' })
+                } else {
+                    res.redirect('/login')
+                }
+            }
         } else {
-            res.status(401).json({ error: true, message: 'you have no authorization' })
+            res.client = getClient()
+            next()
         }
-    } else {
-        next()
+    } catch (e) {
+        next(e)
     }
 }
