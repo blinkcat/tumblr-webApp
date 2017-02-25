@@ -5,6 +5,7 @@ import IconButton from 'material-ui/IconButton'
 import SocialShare from 'material-ui/svg-icons/social/share'
 import LikeButton from './LikeButton'
 import merge from 'lodash/merge'
+import TAvatar from './TAvatar'
 
 export default class TCard extends Component {
     constructor(props) {
@@ -98,7 +99,7 @@ export default class TCard extends Component {
               <CardHeader
                 title={baseInfo.blog_name}
                 subtitle={baseInfo.date}
-                avatar={baseInfo.avatar}
+                avatar={<TAvatar to={`/blog/${baseInfo.blog_name}`} src={baseInfo.avatar} style={{display:'inline-flex',marginRight:'16px'}}/>}
               />
               {this.getJSX()}
               <CardActions>

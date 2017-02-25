@@ -22,6 +22,7 @@ module.exports = function(app) {
     apiRouter.get('/dashboard', api.dashboard)
     apiRouter.get('/likes', api.userLikes)
     apiRouter.get('/following', api.userFollowing)
+    apiRouter.get('/blogPosts', api.blogPosts)
     apiRouter.post('/likePost', api.likePost)
     apiRouter.post('/unlikePost', api.unlikePost)
 

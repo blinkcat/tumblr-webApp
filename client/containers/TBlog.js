@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import TList from '../components/TList'
-import { loadDashBoard } from '../actions'
+import { loadBlogPosts } from '../actions'
 import CircularProgress from 'material-ui/CircularProgress'
 
-class Dashboard extends Component {
+class TBlog extends Component {
     constructor(props) {
         super(props)
     }
 
     componentDidMount() {
-        this.props.posts.length == 0 && this.props.loadDashBoard()
+        // this.props.posts.length == 0 && this.props.loadBlogPosts()
     }
 
     render() {
@@ -24,10 +24,11 @@ class Dashboard extends Component {
                     top: '50%',
                     transform: 'translate(-50%,-50%)'
                 }
-            }>
-            <CircularProgress size={60} thickness={7} /> </div> : <TList posts={posts} isFetching={isFetching} loadData={this.props.loadDashBoard} />
+            }> 
+                <CircularProgress size={60} thickness={7} /> 
+            </div> : <TList posts={posts} isFetching={isFetching} loadData={this.props.loadDashBoard} / >
             return (
-                dom
+                <div></div>
             )
     }
 }
@@ -42,5 +43,5 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 export default connect(mapStateToProps, {
-    loadDashBoard
-})(Dashboard)
+    loadBlogPosts
+})(TBlog)

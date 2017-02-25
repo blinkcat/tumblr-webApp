@@ -86,3 +86,14 @@ exports.unlikePost = wrap(function*(req, res) {
     }
     res.json(result)
 })
+
+//获取blog的post
+exports.blogPosts = wrap(function*(req, res) {
+    debug('blogPosts')
+    try {
+        res.json(yield res.client.blogPosts(req.query.blog_name, req.query))
+    } catch (e) {
+        debug('blogPosts %s', e.message)
+        res.status(ERROR_CODE).json({ error: true, message: e.message })
+    }
+})

@@ -6,7 +6,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { likePost, unlikePost } from '../actions'
 
-class LikeButton extends Component {
+export default class LikeButton extends Component {
     constructor(props) {
         super(props)
         this.state = { liked: this.props.defaultLiked }
@@ -32,7 +32,7 @@ class LikeButton extends Component {
         if (!id || !reblogKey) {
             return
         }
-        likePost({ id, reblogKey, dispatch: this.props.dispatch, cb: this.like })
+        likePost({ id, reblogKey, cb: this.like })
     }
 
     dounLike() {
@@ -40,7 +40,7 @@ class LikeButton extends Component {
         if (!id || !reblogKey) {
             return
         }
-        unlikePost({ id, reblogKey, dispatch: this.props.dispatch, cb: this.like })
+        unlikePost({ id, reblogKey, cb: this.like })
     }
 
     toggle() {
@@ -59,5 +59,3 @@ class LikeButton extends Component {
         )
     }
 }
-
-export default connect()(LikeButton)

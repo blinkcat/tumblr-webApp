@@ -130,7 +130,7 @@ export const loadFollowing = () => (dispatch, getState) => {
     }
 }
 
-export const likePost = ({ id, reblogKey, dispatch, cb }) => {
+export const likePost = ({ id, reblogKey, cb }) => {
     fetch(api.likePost.path, {
         headers: {
             'Accept': 'application/json',
@@ -143,18 +143,12 @@ export const likePost = ({ id, reblogKey, dispatch, cb }) => {
         return res.json()
     }).then((data) => {
         cb && cb()
-        dispatch((dispatch, getState) => {
-            dispatch(set({ type: LIKES_CHANGE },
-                'pagination.likes',
-                getState().pagination.likes.liked_posts.unshift(id)
-            ))
-        })
     }).catch(e => {
         console.log(e.message)
     })
 }
 
-export const unlikePost = ({ id, reblogKey, dispatch, cb }) => {
+export const unlikePost = ({ id, reblogKey, cb }) => {
     fetch(api.unlikePost.path, {
         headers: {
             'Accept': 'application/json',
@@ -167,12 +161,6 @@ export const unlikePost = ({ id, reblogKey, dispatch, cb }) => {
         return res.json()
     }).then((data) => {
         cb && cb()
-        dispatch((dispatch, getState) => {
-            dispatch(set({ type: LIKES_CHANGE },
-                'pagination.likes',
-                without(getState().pagination.likes.liked_posts, id)
-            ))
-        })
     }).catch(e => {
         console.log(e.message)
     })
