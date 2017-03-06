@@ -63,7 +63,6 @@ export const loadDashBoard = () => (dispatch, getState) => {
 export const LIKES_REQUEST = 'LIKES_REQUEST'
 export const LIKES_SUCCESS = 'LIKES_SUCCESS'
 export const LIKES_FAILURE = 'LIKES_FAILURE'
-export const LIKES_CHANGE = 'LIKES_CHANG'
 
 const fetchLikes = ({ limit, offset }) => ({
     [CALL_API]: {
@@ -127,6 +126,40 @@ export const loadFollowing = () => (dispatch, getState) => {
             return
         }
         return dispatch(fetchFollowing({ limit: 10, offset: 10 * (following.page - 1) }))
+    }
+}
+
+export const BLOGPOST_REQUEST = 'BLOGPOST_REQUEST'
+export const BLOGPOST_SUCCESS = 'BLOGPOST_SUCCESS'
+export const BLOGPOST_FAILURE = 'BLOGPOST_FAILURE'
+
+const fetchBlogPosts = ({ limit, offset }) => ({
+    [CALL_API]: {
+        types: [
+            BLOGPOST_REQUEST, {
+                type: BLOGPOST_SUCCESS,
+                payload: (action, state, res) => {
+                    const contentType = res.headers.get('Content-Type')
+                    if (contentType && ~contentType.indexOf('json')) {
+                        return res.json().then((json) => normalize(json, api.likes.schema))
+                    }
+                }
+            },
+            BLOGPOST_FAILURE
+        ],
+        method: 'GET',
+        endpoint: `${api.likes.path}?limit=${limit}&offset=${offset}`,
+        credentials
+    }
+})
+
+export const loadBlogPosts = () => (dispatch, getState) => {
+    var likes = getState().pagination.likes
+    if (!likes.isFetching) {
+        if (likes.liked_count && likes.liked_count <= 10 * (likes.page - 1)) {
+            return
+        }
+        return dispatch(fetchLikes({ limit: 10, offset: 10 * (likes.page - 1) }))
     }
 }
 

@@ -5,10 +5,12 @@ const express = require('express'),
     session = require('express-session'),
     bodyParser = require('body-parser'),
     nunjucks = require('nunjucks'),
+    favicon = require('serve-favicon'),
     secret = process.env.secret || 'blinkcat'
 
 module.exports = function(app) {
     //添加中间件 
+    app.use(favicon(path.join(__dirname, '../favicon.ico')))
     app.use(compression())
     app.use(express.static(path.join(__dirname, '../build')))
     nunjucks.configure('app/view', {

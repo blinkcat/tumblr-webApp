@@ -2,7 +2,7 @@ let {
     isClientReady,
     createClient,
     getClient
-} = require('../../app/model/tumblr')
+} = require('../../app/service/tumblr')
 
 exports.requireAuth = function(req, res, next) {
     const { token, secret } = req.signedCookies

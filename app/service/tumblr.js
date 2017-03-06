@@ -1,5 +1,5 @@
 /**
- *  创建tumblr client
+ *  tumblr client
  */
 
 const tumblr = require('tumblr.js'),
@@ -8,7 +8,7 @@ let client = null
 
 function createClient({ token, secret }) {
     if (!token || !secret) {
-        throw new Error('token or secret must be provided!')
+        throw new Error('token and secret must be provided!')
     }
     if (isClientReady()) {
         return client
@@ -20,14 +20,14 @@ function createClient({ token, secret }) {
                 token,
                 token_secret: secret
             },
-            returnPromises: true
+            returnPromises: true //promise 风格
         })
         return client
     }
 }
 
 function isClientReady() {
-    return !!client
+    return client != null
 }
 
 function getClient() {
