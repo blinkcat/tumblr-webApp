@@ -37,7 +37,7 @@ exports.userLikes = wrap(function*(req, res) {
     try {
         var userLikes = yield res.client.userLikes(req.query)
     } catch (e) {
-        debug('userLikes %s', e.message)
+        debug('userLikes %o', e)
         res.status(ERROR_CODE).json({ error: true, message: e.message })
     }
     res.json(userLikes)

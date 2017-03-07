@@ -1,10 +1,10 @@
-import { CALL_API } from 'redux-api-middleware'
+import { CALL_API, getJSON, ApiError } from 'redux-api-middleware'
 import { normalize } from 'normalizr'
 import set from 'lodash/set'
 import without from 'lodash/without'
 import { api } from '../util'
 import fetch from 'isomorphic-fetch'
-import { credentials } from '../../config'
+import { credentials, pageSize } from '../../config'
 
 export const USERINFO_REQUEST = 'USERINFO_REQUEST'
 export const USERINFO_SUCCESS = 'USERINFO_SUCCESS'
@@ -64,7 +64,7 @@ export const LIKES_REQUEST = 'LIKES_REQUEST'
 export const LIKES_SUCCESS = 'LIKES_SUCCESS'
 export const LIKES_FAILURE = 'LIKES_FAILURE'
 
-const fetchLikes = ({ limit, offset }) => ({
+/*const fetchLikes = ({ limit, offset }) => ({
     [CALL_API]: {
         types: [
             LIKES_REQUEST, {
@@ -80,6 +80,41 @@ const fetchLikes = ({ limit, offset }) => ({
         ],
         method: 'GET',
         endpoint: `${api.likes.path}?limit=${limit}&offset=${offset}`,
+        credentials
+    }
+})*/
+
+export const fetchLikes = ({ limit = pageSize, offset = 0 }) => ({
+    [CALL_API]: {
+        types: [
+            LIKES_REQUEST, {
+                type: LIKES_SUCCESS,
+                payload: (action, state, res) => {
+                    return getJSON(res).then((json) => normalize(json, api.likes.schema))
+                }
+            }, {
+                type: LIKES_FAILURE,
+                payload: (action, state, res) => {
+                    return getJSON(res).then((json) => new ApiError(res.status, res.statusText, json))
+                }
+            }
+        ],
+        method: 'GET',
+        endpoint: (state) => {
+            var likes = state.pagination.likes
+            return `${api.likes.path}?limit=${limit}&offset=${offset||limit*(likes.page - 1)}`
+        },
+        bailout: (state) => {
+            var likes = state.pagination.likes
+            if (likes.isFetching) {
+                return true
+            } else {
+                if (likes.liked_count && likes.liked_count <= limit * (likes.page - 1)) {
+                    return true
+                }
+            }
+            return false
+        },
         credentials
     }
 })

@@ -60,5 +60,13 @@ const pagination = combineReducers({
     })
 })
 
-const rootReducer = combineReducers({ entities, user, pagination })
+const error = (state = { error: false }, action) => {
+    if (action.error) {
+        return merge({}, state, { error: true }, action.payload)
+    } else {
+        return { error: false }
+    }
+}
+
+const rootReducer = combineReducers({ entities, user, pagination, error })
 export default rootReducer
