@@ -10,7 +10,7 @@ export const USERINFO_REQUEST = 'USERINFO_REQUEST'
 export const USERINFO_SUCCESS = 'USERINFO_SUCCESS'
 export const USERINFO_FAILURE = 'USERINFO_FAILURE'
 
-const fetchUserInfo = () => ({
+export const fetchUserInfo = () => ({
     [CALL_API]: {
         types: [
             USERINFO_REQUEST,
@@ -19,70 +19,54 @@ const fetchUserInfo = () => ({
         ],
         method: 'GET',
         endpoint: api.userInfo.path,
+        bailout: (state) => {
+            if (state.user) {
+                return true
+            }
+            return false
+        },
         credentials
     }
 })
-
-export const loadUserInfo = () => (dispatch, getState) => {
-    if (!getState().user) {
-        return dispatch(fetchUserInfo())
-    }
-}
 
 export const DASHBOARD_REQUEST = 'DASHBOARD_REQUEST'
 export const DASHBOARD_SUCCESS = 'DASHBOARD_SUCCESS'
 export const DASHBOARD_FAILURE = 'DASHBOARD_FAILURE'
 
-const fetchDashBoard = ({ limit, offset }) => ({
+export const fetchDashBoard = ({ limit = pageSize, offset = 0 }) => ({
     [CALL_API]: {
         types: [
             DASHBOARD_REQUEST, {
                 type: DASHBOARD_SUCCESS,
                 payload: (action, state, res) => {
-                    const contentType = res.headers.get('Content-Type')
-                    if (contentType && ~contentType.indexOf('json')) {
-                        return res.json().then((json) => normalize(json, api.dashboard.schema))
-                    }
+                    return getJSON(res).then((json) => normalize(json, api.dashboard.schema))
                 }
-            },
-            DASHBOARD_FAILURE
+            }, {
+                type: DASHBOARD_FAILURE,
+                payload: (action, state, res) => {
+                    return getJSON(res).then((json) => new ApiError(res.status, res.statusText, json))
+                }
+            }
         ],
         method: 'GET',
-        endpoint: `${api.dashboard.path}?limit=${limit}&offset=${offset}`,
+        endpoint: (state) => {
+            var dashboard = state.pagination.dashboard
+            return `${api.dashboard.path}?limit=${limit}&offset=${offset||limit*(dashboard.page - 1)}`
+        },
+        bailout: (state) => {
+            var dashboard = state.pagination.dashboard
+            if (dashboard.isFetching) {
+                return true
+            }
+            return false
+        },
         credentials
     }
 })
 
-export const loadDashBoard = () => (dispatch, getState) => {
-    var dashboard = getState().pagination.dashboard
-    if (!dashboard.isFetching) {
-        return dispatch(fetchDashBoard({ limit: 10, offset: 10 * (dashboard.page - 1) }))
-    }
-}
-
 export const LIKES_REQUEST = 'LIKES_REQUEST'
 export const LIKES_SUCCESS = 'LIKES_SUCCESS'
 export const LIKES_FAILURE = 'LIKES_FAILURE'
-
-/*const fetchLikes = ({ limit, offset }) => ({
-    [CALL_API]: {
-        types: [
-            LIKES_REQUEST, {
-                type: LIKES_SUCCESS,
-                payload: (action, state, res) => {
-                    const contentType = res.headers.get('Content-Type')
-                    if (contentType && ~contentType.indexOf('json')) {
-                        return res.json().then((json) => normalize(json, api.likes.schema))
-                    }
-                }
-            },
-            LIKES_FAILURE
-        ],
-        method: 'GET',
-        endpoint: `${api.likes.path}?limit=${limit}&offset=${offset}`,
-        credentials
-    }
-})*/
 
 export const fetchLikes = ({ limit = pageSize, offset = 0 }) => ({
     [CALL_API]: {
@@ -119,50 +103,44 @@ export const fetchLikes = ({ limit = pageSize, offset = 0 }) => ({
     }
 })
 
-export const loadLikes = () => (dispatch, getState) => {
-    var likes = getState().pagination.likes
-    if (!likes.isFetching) {
-        if (likes.liked_count && likes.liked_count <= 10 * (likes.page - 1)) {
-            return
-        }
-        return dispatch(fetchLikes({ limit: 10, offset: 10 * (likes.page - 1) }))
-    }
-}
-
 export const FOLLOWING_REQUEST = 'FOLLOWING_REQUEST'
 export const FOLLOWING_SUCCESS = 'FOLLOWING_SUCCESS'
 export const FOLLOWING_FAILURE = 'FOLLOWING_FAILURE'
 
-const fetchFollowing = ({ limit, offset }) => ({
+export const fetchFollowing = ({ limit = pageSize, offset = 0 }) => ({
     [CALL_API]: {
         types: [
             FOLLOWING_REQUEST, {
                 type: FOLLOWING_SUCCESS,
                 payload: (action, state, res) => {
-                    const contentType = res.headers.get('Content-Type')
-                    if (contentType && ~contentType.indexOf('json')) {
-                        return res.json().then((json) => normalize(json, api.following.schema))
-                    }
+                    return getJSON(res).then((json) => normalize(json, api.following.schema))
                 }
-            },
-            FOLLOWING_FAILURE
+            }, {
+                type: FOLLOWING_FAILURE,
+                payload: (action, state, res) => {
+                    return getJSON(res).then((json) => new ApiError(res.status, res.statusText, json))
+                }
+            }
         ],
         method: 'GET',
-        endpoint: `${api.following.path}?limit=${limit}&offset=${offset}`,
+        endpoint: (state) => {
+            var following = state.pagination.following
+            return `${api.following.path}?limit=${limit}&offset=${offset||limit*(following.page - 1)}`
+        },
+        bailout: (state) => {
+            var following = state.pagination.following
+            if (following.isFetching) {
+                return true
+            } else {
+                if (following.total_blogs && following.total_blogs <= limit * (following.page - 1)) {
+                    return true
+                }
+            }
+            return false
+        },
         credentials
     }
 })
-
-export const loadFollowing = () => (dispatch, getState) => {
-    var following = getState().pagination.following
-    if (!following.isFetching) {
-        console.log('following', following)
-        if (following.total_blogs && following.total_blogs <= 10 * (following.page - 1)) {
-            return
-        }
-        return dispatch(fetchFollowing({ limit: 10, offset: 10 * (following.page - 1) }))
-    }
-}
 
 export const BLOGPOST_REQUEST = 'BLOGPOST_REQUEST'
 export const BLOGPOST_SUCCESS = 'BLOGPOST_SUCCESS'

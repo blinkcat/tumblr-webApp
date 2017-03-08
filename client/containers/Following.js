@@ -5,15 +5,20 @@ import RaisedButton from 'material-ui/RaisedButton'
 import Divider from 'material-ui/Divider'
 import CircularProgress from 'material-ui/CircularProgress'
 import { connect } from 'react-redux'
-import { loadFollowing } from '../actions'
+import { fetchFollowing } from '../actions'
 
 class Following extends Component {
     constructor(props) {
         super(props)
+        this.loadFollowing = this.loadFollowing.bind(this)
     }
 
     componentDidMount() {
-        this.props.blogs.length == 0 && this.props.loadFollowing()
+        this.props.blogs.length == 0 && this.props.dispatch(fetchFollowing({}))
+    }
+
+    loadFollowing() {
+        this.props.dispatch(fetchFollowing({}))
     }
 
     render() {
@@ -38,7 +43,7 @@ class Following extends Component {
 	            	}
 	            </List>
 	            <div style={{textAlign:'center',maxWidth:'600px',margin:'0 auto'}}>
-					{this.props.isFetching ? <CircularProgress /> : <RaisedButton style={{padding:0}} label="加载更多" fullWidth={true} onClick={this.props.loadFollowing} />}
+					{this.props.isFetching ? <CircularProgress /> : <RaisedButton style={{padding:0}} label="加载更多" fullWidth={true} onClick={this.loadFollowing} />}
 				</div>
             </div>
         )
@@ -54,6 +59,4 @@ const mapStateToProps = (state, ownProps) => {
     }
 }
 
-export default connect(mapStateToProps, {
-    loadFollowing
-})(Following)
+export default connect(mapStateToProps)(Following)
