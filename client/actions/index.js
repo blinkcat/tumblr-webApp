@@ -33,7 +33,7 @@ export const DASHBOARD_REQUEST = 'DASHBOARD_REQUEST'
 export const DASHBOARD_SUCCESS = 'DASHBOARD_SUCCESS'
 export const DASHBOARD_FAILURE = 'DASHBOARD_FAILURE'
 
-export const fetchDashBoard = ({ limit = pageSize, offset = 0 }) => ({
+export const fetchDashBoard = ({ limit = pageSize, offset = 0 } = {}) => ({
     [CALL_API]: {
         types: [
             DASHBOARD_REQUEST, {
@@ -68,7 +68,7 @@ export const LIKES_REQUEST = 'LIKES_REQUEST'
 export const LIKES_SUCCESS = 'LIKES_SUCCESS'
 export const LIKES_FAILURE = 'LIKES_FAILURE'
 
-export const fetchLikes = ({ limit = pageSize, offset = 0 }) => ({
+export const fetchLikes = ({ limit = pageSize, offset = 0 }={}) => ({
     [CALL_API]: {
         types: [
             LIKES_REQUEST, {
@@ -107,7 +107,7 @@ export const FOLLOWING_REQUEST = 'FOLLOWING_REQUEST'
 export const FOLLOWING_SUCCESS = 'FOLLOWING_SUCCESS'
 export const FOLLOWING_FAILURE = 'FOLLOWING_FAILURE'
 
-export const fetchFollowing = ({ limit = pageSize, offset = 0 }) => ({
+export const fetchFollowing = ({ limit = pageSize, offset = 0 }={}) => ({
     [CALL_API]: {
         types: [
             FOLLOWING_REQUEST, {

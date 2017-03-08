@@ -11,19 +11,24 @@ class Likes extends Component {
     }
 
     componentDidMount() {
-        this.props.posts.length == 0 && this.props.dispatch(fetchLikes({})) //this.props.loadLikes()
+        this.props.posts.length == 0 && this.props.dispatch(fetchLikes())
     }
 
     loadLikes() {
-        this.props.dispatch(fetchLikes({}))
+        this.props.dispatch(fetchLikes())
     }
 
     render() {
         const { isFetching, posts } = this.props
-        var dom = isFetching && posts.length == 0 ? <div style={{textAlign:'center',position:'fixed',left:'50%',top:'50%',transform:'translate(-50%,-50%)'}}><CircularProgress size={60} thickness={7} /></div> : <TList posts={posts} isFetching={isFetching} loadData={this.loadLikes} />
-        return (
-            dom
-        )
+        var dom = isFetching && posts.length == 0 ?
+            <div style = {
+                { textAlign: 'center', position: 'fixed', left: '50%', top: '50%', transform: 'translate(-50%,-50%)' }
+            }>
+                <CircularProgress size={60} thickness={7} /> 
+            </div> : <TList posts={posts} isFetching={isFetching} loadData={this.loadLikes} / >
+            return (
+                dom
+            )
     }
 }
 
@@ -34,6 +39,11 @@ const mapStateToProps = (state, ownProps) => {
         }),
         isFetching: state.pagination.likes.isFetching
     }
+}
+
+Likes.propTypes = {
+    isFetching: React.PropTypes.bool,
+    posts: React.PropTypes.arrayOf(React.PropTypes.object)
 }
 
 export default connect(mapStateToProps)(Likes)

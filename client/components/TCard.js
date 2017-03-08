@@ -37,8 +37,6 @@ export default class TCard extends Component {
                     <source src={curPost.video_url} />
                   </video>
               </CardMedia> 
-              {/*<CardTitle title = "Card title"
-              subtitle = "Card subtitle" />*/}
               <CardText>
                   {curPost.summary}
               </CardText>
@@ -58,8 +56,6 @@ export default class TCard extends Component {
                   })
                 }
               </CardMedia> 
-              {/*<CardTitle title = "Card title"
-              subtitle = "Card subtitle" />*/}
               <CardText>
                   {curPost.summary}
               </CardText>
@@ -102,12 +98,12 @@ export default class TCard extends Component {
                 avatar={<TAvatar to={`/blog/${baseInfo.blog_name}`} src={baseInfo.avatar} style={{display:'inline-flex',marginRight:'16px'}}/>}
               />
               {this.getJSX()}
-              <CardActions>
-                <FlatButton label={baseInfo.note_count+' 热度'} />
-                <LikeButton tooltip="喜欢" style={{float:'right',width:'36px',height:'36px'}} id={baseInfo.id} reblogKey={baseInfo.reblog_key} defaultLiked={baseInfo.liked}/>
-                <IconButton tooltip="分享" style={{float:'right',width:'36px',height:'36px'}}>
+              <CardActions style={{'textAlign':'right'}}>
+                <FlatButton label={baseInfo.note_count+' 热度'} style={{position: 'absolute',left: '8px',top: '50%',transform: 'translateY(-50%)'}}/>
+                <IconButton tooltip="分享" style={{'verticalAlign':'middle',marginRight:0}}>
                   <SocialShare />
                 </IconButton>
+                <LikeButton tooltip="喜欢" style={{'verticalAlign':'middle'}} id={baseInfo.id} reblogKey={baseInfo.reblog_key} defaultLiked={baseInfo.liked}/>
               </CardActions>
             </Card>
         )

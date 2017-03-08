@@ -11,17 +11,17 @@ class Dashboard extends Component {
     }
 
     componentDidMount() {
-        this.props.posts.length == 0 && this.props.dispatch(fetchDashBoard({}))
+        this.props.posts.length == 0 && this.props.dispatch(fetchDashBoard())
     }
 
     loadDashBoard() {
-        this.props.dispatch(fetchDashBoard({}))
+        this.props.dispatch(fetchDashBoard())
     }
 
     render() {
         const { isFetching, posts } = this.props
         var dom = isFetching && posts.length == 0 ?
-            < div style = {
+            <div style = {
                 {
                     textAlign: 'center',
                     position: 'fixed',
@@ -30,7 +30,8 @@ class Dashboard extends Component {
                     transform: 'translate(-50%,-50%)'
                 }
             } >
-            <CircularProgress size={60} thickness={7} /> < /div> : <TList posts={posts} isFetching={isFetching} loadData={this.loadDashBoard} / >
+                <CircularProgress size={60} thickness={7} /> 
+            </div> : <TList posts={posts} isFetching={isFetching} loadData={this.loadDashBoard} />
             return (
                 dom
             )
@@ -44,6 +45,11 @@ const mapStateToProps = (state, ownProps) => {
         }),
         isFetching: state.pagination.dashboard.isFetching
     }
+}
+
+Dashboard.propTypes = {
+    isFetching: React.PropTypes.bool,
+    posts: React.PropTypes.arrayOf(React.PropTypes.object)
 }
 
 export default connect(mapStateToProps)(Dashboard)

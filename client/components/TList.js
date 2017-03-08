@@ -15,18 +15,22 @@ export default class TList extends Component {
         return (
             <ul style={{paddingTop:'66px'}}>
             {
-            	posts.map((post)=>{
-            		return (
-            			<li style={style} key={post.id}>
-							<TCard post={post}/>
-						</li>
-            		)
-            	})
+                posts.map((post)=>{
+                    return (
+                        <li style={style} key={post.id}>
+                            <TCard post={post}/>
+                        </li>
+                    )
+                })
             }
             <li style={{ 'maxWidth': '540px', margin: '4px auto 10px' ,textAlign:'center'}} key={0}>
-            	{btnDom}
-			</li>
-			</ul>
+                {btnDom}
+            </li>
+            </ul>
         )
     }
+}
+
+TList.propTypes = {
+    posts: React.PropTypes.array
 }

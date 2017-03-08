@@ -20,11 +20,21 @@ export default class TAppBar extends Component {
         this.state = { open: false }
         this.handleToggle = this.handleToggle.bind(this)
         this.handleClose = this.handleClose.bind(this)
+        this.pushAndClose = this.pushAndClose.bind(this)
     }
 
-    handleToggle() { this.setState({ open: !this.state.open }) }
+    handleToggle() {
+        this.setState({ open: !this.state.open })
+    }
 
-    handleClose() { this.setState({ open: false }) }
+    handleClose() {
+        this.setState({ open: false })
+    }
+
+    pushAndClose(url) {
+        browserHistory.push(url)
+        this.handleClose()
+    }
 
     render() {
         const { following = 0, likes = 0, blogs = [{}] } = this.props
@@ -41,9 +51,9 @@ export default class TAppBar extends Component {
                     }
                 >
                     <List>
-                      <ListItem primaryText="首页" leftIcon={<ActionHome />} onTouchTap={()=>{browserHistory.push('/dashboard');this.handleClose()}} />
-                      <ListItem primaryText="喜欢" leftIcon={<ActionFavorite />} rightIcon={<Badge badgeContent={likes} primary={true}/>} onTouchTap={()=>{browserHistory.push('/likes');this.handleClose()}} />
-                      <ListItem primaryText="关注" leftIcon={<ActionNoteAdd />} rightIcon={<Badge badgeContent={following} primary={true}/>} onTouchTap={()=>{browserHistory.push('/following');this.handleClose()}}/>
+                      <ListItem primaryText="首页" leftIcon={<ActionHome />} onTouchTap={()=>{this.pushAndClose('/dashboard')}} />
+                      <ListItem primaryText="喜欢" leftIcon={<ActionFavorite />} rightIcon={<Badge badgeContent={likes} primary={true}/>} onTouchTap={()=>{this.pushAndClose('/likes')}} />
+                      <ListItem primaryText="关注" leftIcon={<ActionNoteAdd />} rightIcon={<Badge badgeContent={following} primary={true}/>} onTouchTap={()=>{this.pushAndClose('/following')}}/>
                       <ListItem primaryText="设置" leftIcon={<ActionSettings />} />
                       <ListItem primaryText="新建帖子" leftIcon={<ContentCreate />} />
                     </List>
