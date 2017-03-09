@@ -22,7 +22,7 @@ class Blog extends Component {
     render() {
         const { isFetching, posts } = this.props
         var dom = isFetching && posts.length == 0 ?
-            < div style = {
+            <div style = {
                 {
                     textAlign: 'center',
                     position: 'fixed',
@@ -31,7 +31,7 @@ class Blog extends Component {
                     transform: 'translate(-50%,-50%)'
                 }
             } >
-            <CircularProgress size={60} thickness={7} /> < /div> : <TList posts={posts} isFetching={isFetching} loadData={this.props.loadDashBoard} / >
+            <CircularProgress size={60} thickness={7} /> </div> : <TList posts={posts} isFetching={isFetching} loadData={this.props.loadDashBoard} />
             return (
                 dom
             )
@@ -41,7 +41,7 @@ class Blog extends Component {
 const mapStateToProps = (state, ownProps) => {
     const blog = state.blogs[ownProps.routeParams.blog_name],
         posts = !blog ? [] : blog.posts
-        
+
     return {
         posts: posts.map((cur) => {
             return state.entities.posts[cur]

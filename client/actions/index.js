@@ -148,21 +148,22 @@ export const BLOGPOST_FAILURE = 'BLOGPOST_FAILURE'
 
 export const fetchBlogPosts = ({ blog_name, limit = pageSize, offset = 0 } = {}) => ({
     [CALL_API]: {
-        types: [
-            BLOGPOST_REQUEST, {
-                type: BLOGPOST_SUCCESS,
-                payload: (action, state, res) => {
-                    return getJSON(res).then((json) => normalize(json, api.likes.schema))
-                },
-                blog_name
-            }, {
-                type: BLOGPOST_FAILURE,
-                payload: (action, state, res) => {
-                    return getJSON(res).then((json) => new ApiError(res.status, res.statusText, json))
-                },
-                blog_name
-            }
-        ],
+        types: [{
+            type: BLOGPOST_REQUEST
+            meta: { blog_name }
+        }, {
+            type: BLOGPOST_SUCCESS,
+            payload: (action, state, res) => {
+                return getJSON(res).then((json) => normalize(json, api.likes.schema))
+            },
+            meta: { blog_name }
+        }, {
+            type: BLOGPOST_FAILURE,
+            payload: (action, state, res) => {
+                return getJSON(res).then((json) => new ApiError(res.status, res.statusText, json))
+            },
+            meta: { blog_name }
+        }],
         method: 'GET',
         endpoint: (state) => {
             var blog = state.blogs[blog_name]
