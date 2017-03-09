@@ -12,6 +12,8 @@ import ContentCreate from 'material-ui/svg-icons/content/create'
 import Avatar from 'material-ui/Avatar'
 import Subheader from 'material-ui/Subheader'
 import Badge from 'material-ui/Badge'
+import IconButton from 'material-ui/IconButton';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import browserHistory from 'react-router/lib/browserHistory'
 
 export default class TAppBar extends Component {
@@ -44,7 +46,7 @@ export default class TAppBar extends Component {
         avatarSrc = avatarSrc ? `https://api.tumblr.com/v2/blog/${avatarSrc}/avatar` : ''
         return (
             <div>
-                <AppBar title="tumblr" onLeftIconButtonTouchTap={this.handleToggle} style={{position:'fixed',top:0,left:0}}/>
+                <AppBar title="tumblr" onLeftIconButtonTouchTap={this.handleToggle} iconElementRight={<IconButton><NavigationClose /></IconButton>} style={{position:'fixed',top:0,left:0}}/>
                 <Drawer docked = { false } width = { 250 } open = { this.state.open }
                     onRequestChange = {
                         (open) => this.setState({ open })

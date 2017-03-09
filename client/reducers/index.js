@@ -61,8 +61,7 @@ const pagination = combineReducers({
 })
 
 const blogs = (state = {}, action) => {
-    var { blog_name='' } = action.meta
-    console.log('blog_name', blog_name)
+    var { blog_name = '' } = action.meta||{}
     if (!blog_name) {
         return state
     }

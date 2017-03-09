@@ -149,12 +149,12 @@ export const BLOGPOST_FAILURE = 'BLOGPOST_FAILURE'
 export const fetchBlogPosts = ({ blog_name, limit = pageSize, offset = 0 } = {}) => ({
     [CALL_API]: {
         types: [{
-            type: BLOGPOST_REQUEST
+            type: BLOGPOST_REQUEST,
             meta: { blog_name }
         }, {
             type: BLOGPOST_SUCCESS,
             payload: (action, state, res) => {
-                return getJSON(res).then((json) => normalize(json, api.likes.schema))
+                return getJSON(res).then((json) => normalize(json, api.blogPosts.schema))
             },
             meta: { blog_name }
         }, {
@@ -167,13 +167,16 @@ export const fetchBlogPosts = ({ blog_name, limit = pageSize, offset = 0 } = {})
         method: 'GET',
         endpoint: (state) => {
             var blog = state.blogs[blog_name]
-            return `${api.blogPosts.path}?blog_name=${blog_name}&limit=${limit}&offset=${offset||limit*(blog.page)}`
+            return `${api.blogPosts.path}?blog_name=${blog_name}&limit=${limit}&offset=${offset||limit*(blog?blog.page:0)}`
         },
         bailout: (state) => {
             if (!blog_name) {
                 return true
             }
             var blog = state.blogs[blog_name]
+            if (!blog) {
+                return false
+            }
             if (blog.isFetching) {
                 return true
             } else {

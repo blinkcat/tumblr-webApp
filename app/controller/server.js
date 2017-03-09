@@ -19,7 +19,7 @@ exports.index = function(req, res, next) {
         } else if (redirectLocation) {
             res.redirect(redirectLocation.pathname + redirectLocation.search)
         } else if (renderProps) {
-            Promise.all([store.dispatch(fetchUserInfo()), store.dispatch(fetchDashBoard())])
+            Promise.all([/*store.dispatch(fetchUserInfo()), store.dispatch(fetchDashBoard())*/])
                 .then(() => {
                     const html = renderToString(
                         <Provider store={store}>
@@ -34,11 +34,11 @@ exports.index = function(req, res, next) {
                             initialState: JSON.stringify(store.getState()),
                             css: assetsByChunkName.main
                                 .filter(path => path.endsWith('.css'))
-                                .map(path => `<link rel="stylesheet" href="${path}" />`)
+                                .map(path => `<link rel="stylesheet" href="/${path}" />`)
                                 .join(''),
                             js: assetsByChunkName.main
                                 .filter(path => path.endsWith('.js'))
-                                .map(path => `<script src="${path}" /></script>`)
+                                .map(path => `<script src="/${path}" /></script>`)
                                 .join('')
                         })
                     } else {
