@@ -25,14 +25,14 @@ class Likes extends Component {
                 { textAlign: 'center', position: 'fixed', left: '50%', top: '50%', transform: 'translate(-50%,-50%)' }
             }>
                 <CircularProgress size={60} thickness={7} /> 
-            </div> : <TList posts={posts} isFetching={isFetching} loadData={this.loadLikes} / >
+            </div> : <TList posts={posts} isFetching={isFetching} loadData={this.loadLikes} />
             return (
                 dom
             )
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     return {
         posts: state.pagination.likes.liked_posts.map((cur) => {
             return state.entities.posts[cur]

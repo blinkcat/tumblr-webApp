@@ -38,7 +38,7 @@ class Dashboard extends Component {
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     return {
         posts: state.pagination.dashboard.posts.map((cur) => {
             return state.entities.posts[cur]

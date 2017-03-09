@@ -56,7 +56,7 @@ class Following extends Component {
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     return {
         blogs: state.pagination.following.blogs.map((cur) => {
             return state.entities.blogs[cur]

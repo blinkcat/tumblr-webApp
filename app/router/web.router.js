@@ -12,5 +12,6 @@ webRouter.get('/', server.index)
 webRouter.get('/dashboard', server.index)
 webRouter.get('/likes', server.index)
 webRouter.get('/following', server.index)
+webRouter.get('/blog/:blog_name', server.index)
 
 module.exports = webRouter

@@ -22,7 +22,7 @@ const paginate = ({ types, arrayName = 'posts', countName = 'count' }) => {
 
     return function(state = {
         isFetching: false,
-        page: 1,
+        page: 0,
         [arrayName]: [],
         [countName]: undefined
     }, action) {
@@ -60,13 +60,48 @@ const pagination = combineReducers({
     })
 })
 
-const error = (state = { error: false }, action) => {
-    if (action.error) {
-        return merge({}, state, { error: true }, action.payload)
-    } else {
-        return { error: false }
+const blogs = (state = {}, action) => {
+    var { blog_name='' } = action.meta
+    console.log('blog_name', blog_name)
+    if (!blog_name) {
+        return state
+    }
+    var ori = state[blog_name] || {},
+        oriPage = ori.page,
+        oriPosts = ori.posts
+
+    switch (action.type) {
+        case Actions.BLOGPOST_REQUEST:
+            return merge({}, state, {
+                [blog_name]: { isFetching: true, page: oriPage || 0, posts: oriPosts || [] }
+            })
+        case Actions.BLOGPOST_SUCCESS:
+            return merge({}, state, {
+                [blog_name]: {
+                    isFetching: false,
+                    page: oriPage ? oriPage + 1 : 1,
+                    posts: union(oriPosts ? oriPosts : [], action.payload.result['posts']),
+                    total_posts: action.payload.result['total_posts']
+                }
+            })
+        case Actions.BLOGPOST_FAILURE:
+            return merge({}, state, {
+                [blog_name]: {
+                    isFetching: false
+                }
+            })
+        default:
+            return state
     }
 }
 
-const rootReducer = combineReducers({ entities, user, pagination, error })
+const error = (state = { error: false, type: '' }, action) => {
+    if (action.error) {
+        return merge({}, state, { error: true, type: action.type }, action.payload)
+    } else {
+        return { error: false, type: '' }
+    }
+}
+
+const rootReducer = combineReducers({ entities, user, pagination, error, blogs })
 export default rootReducer

@@ -5,7 +5,7 @@ import App from './containers/App'
 import Dashboard from './containers/Dashboard'
 import Likes from './containers/Likes'
 import Following from './containers/Following'
-import TBlog from './containers/TBlog'
+import Blog from './containers/Blog'
 
 export default (
     <Route path="/" component={App}>
@@ -13,6 +13,6 @@ export default (
     	<Route path="dashboard" component={Dashboard} />
     	<Route path="likes" component={Likes} />
     	<Route path="following" component={Following} />
-    	<Route path="blog/:blog_name" component={TBlog} />
+    	<Route path="blog/:blog_name" component={Blog} />
   	</Route>
 )
