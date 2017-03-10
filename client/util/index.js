@@ -18,4 +18,9 @@ const api = {
     unlikePost: { path: `${url}unlikePost` }
 }
 
-export { api }
+const AppBarStyle = {
+    COMMON_STYLE: 0,
+    BLOG_STYLE: 1
+}
+
+export { api, AppBarStyle }

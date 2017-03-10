@@ -15,6 +15,7 @@ import Badge from 'material-ui/Badge'
 import IconButton from 'material-ui/IconButton';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import browserHistory from 'react-router/lib/browserHistory'
+import { AppBarStyle } from '../util'
 
 export default class TAppBar extends Component {
     constructor(props) {
@@ -38,6 +39,24 @@ export default class TAppBar extends Component {
         this.handleClose()
     }
 
+    getAppBar() {
+        var appBarStyle = { position: 'fixed', top: 0, left: 0 }
+        switch (this.props.appbar.style) {
+            case AppBarStyle.COMMON_STYLE:
+                return <AppBar title="tumblr" 
+                            onLeftIconButtonTouchTap={this.handleToggle} 
+                            style={appBarStyle}
+                        />
+            case AppBarStyle.BLOG_STYLE:
+                return <AppBar title="tumblr" 
+                            onLeftIconButtonTouchTap={this.handleToggle}
+                            onRightIconButtonTouchTap={()=>{browserHistory.goBack()}}
+                            iconElementRight={<IconButton><NavigationClose /></IconButton>} 
+                            style={appBarStyle}
+                        />
+        }
+    }
+
     render() {
         const { following = 0, likes = 0, blogs = [{}] } = this.props
         const { name = '', description = '', url = '' } = blogs[0]
@@ -46,7 +65,7 @@ export default class TAppBar extends Component {
         avatarSrc = avatarSrc ? `https://api.tumblr.com/v2/blog/${avatarSrc}/avatar` : ''
         return (
             <div>
-                <AppBar title="tumblr" onLeftIconButtonTouchTap={this.handleToggle} iconElementRight={<IconButton><NavigationClose /></IconButton>} style={{position:'fixed',top:0,left:0}}/>
+                {this.getAppBar()}
                 <Drawer docked = { false } width = { 250 } open = { this.state.open }
                     onRequestChange = {
                         (open) => this.setState({ open })

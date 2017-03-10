@@ -1,6 +1,7 @@
 import merge from 'lodash/merge'
 import union from 'lodash/union'
 import { combineReducers } from 'redux'
+import { AppBarStyle } from '../util'
 import * as Actions from '../actions'
 
 const entities = (state = { posts: {}, blogs: {} }, action) => {
@@ -61,7 +62,7 @@ const pagination = combineReducers({
 })
 
 const blogs = (state = {}, action) => {
-    var { blog_name = '' } = action.meta||{}
+    var { blog_name = '' } = action.meta || {}
     if (!blog_name) {
         return state
     }
@@ -94,6 +95,16 @@ const blogs = (state = {}, action) => {
     }
 }
 
+const appbar = (state = { style: AppBarStyle.COMMON_STYLE }, action) => {
+    switch (action.type) {
+        case Actions.CHANGE_APPBAR:
+            console.log('merge({}, state, action.payload)', 'state', state, 'action.payload', action.payload, merge({}, state, action.payload))
+            return merge({}, state, action.payload)
+        default:
+            return state
+    }
+}
+
 const error = (state = { error: false, type: '' }, action) => {
     if (action.error) {
         return merge({}, state, { error: true, type: action.type }, action.payload)
@@ -102,5 +113,5 @@ const error = (state = { error: false, type: '' }, action) => {
     }
 }
 
-const rootReducer = combineReducers({ entities, user, pagination, error, blogs })
+const rootReducer = combineReducers({ entities, user, pagination, error, blogs, appbar })
 export default rootReducer

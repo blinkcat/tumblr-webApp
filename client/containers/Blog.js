@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import TList from '../components/TList'
-import { fetchBlogPosts } from '../actions'
+import { fetchBlogPosts, changeAppBar } from '../actions'
 import CircularProgress from 'material-ui/CircularProgress'
+import { AppBarStyle } from '../util'
 
 class Blog extends Component {
     constructor(props) {
@@ -13,6 +14,11 @@ class Blog extends Component {
     componentDidMount() {
         this.blog_name = this.props.routeParams.blog_name
         this.props.posts.length == 0 && this.props.dispatch(fetchBlogPosts({ blog_name: this.blog_name }))
+        this.props.dispatch(changeAppBar(AppBarStyle.BLOG_STYLE))
+    }
+
+    componentWillUnmount(){
+        this.props.dispatch(changeAppBar(AppBarStyle.COMMON_STYLE))
     }
 
     loadBlogPosts() {
@@ -31,7 +37,7 @@ class Blog extends Component {
                     transform: 'translate(-50%,-50%)'
                 }
             } >
-            <CircularProgress size={60} thickness={7} /> </div> : <TList posts={posts} isFetching={isFetching} loadData={this.props.loadDashBoard} />
+            <CircularProgress size={60} thickness={7} /> </div> : <TList posts={posts} isFetching={isFetching} loadData={this.loadBlogPosts} />
             return (
                 dom
             )

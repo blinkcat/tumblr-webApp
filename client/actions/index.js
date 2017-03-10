@@ -2,7 +2,7 @@ import { CALL_API, getJSON, ApiError } from 'redux-api-middleware'
 import { normalize } from 'normalizr'
 import set from 'lodash/set'
 import without from 'lodash/without'
-import { api } from '../util'
+import { api, AppBarStyle } from '../util'
 import fetch from 'isomorphic-fetch'
 import { credentials, pageSize } from '../../config'
 
@@ -188,6 +188,12 @@ export const fetchBlogPosts = ({ blog_name, limit = pageSize, offset = 0 } = {})
         },
         credentials
     }
+})
+
+export const CHANGE_APPBAR = 'CHANGE_APPBAR'
+export const changeAppBar = (style = AppBarStyle.COMMON_STYLE) => ({
+    type: CHANGE_APPBAR,
+    payload: { style }
 })
 
 export const likePost = ({ id, reblogKey, cb }) => {
