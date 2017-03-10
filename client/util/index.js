@@ -13,7 +13,7 @@ const api = {
     dashboard: { path: `${url}dashboard`, schema: { posts: arrayOf(post) } },
     likes: { path: `${url}likes`, schema: { liked_posts: arrayOf(post) } },
     following: { path: `${url}following`, schema: { blogs: arrayOf(blog) } },
-    blogPosts: { path: `${url}blogPosts`, schema: { posts: arrayOf(post) } },
+    blogPosts: { path: `${url}blogPosts`, schema: { posts: arrayOf(post), blog } },
     likePost: { path: `${url}likePost` },
     unlikePost: { path: `${url}unlikePost` }
 }

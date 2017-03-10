@@ -98,7 +98,6 @@ const blogs = (state = {}, action) => {
 const appbar = (state = { style: AppBarStyle.COMMON_STYLE }, action) => {
     switch (action.type) {
         case Actions.CHANGE_APPBAR:
-            console.log('merge({}, state, action.payload)', 'state', state, 'action.payload', action.payload, merge({}, state, action.payload))
             return merge({}, state, action.payload)
         default:
             return state

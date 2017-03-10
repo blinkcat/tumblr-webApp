@@ -196,6 +196,7 @@ export const changeAppBar = (style = AppBarStyle.COMMON_STYLE) => ({
     payload: { style }
 })
 
+// export 
 export const likePost = ({ id, reblogKey, cb }) => {
     fetch(api.likePost.path, {
         headers: {
