@@ -1,9 +1,10 @@
 import merge from 'lodash/merge'
 import union from 'lodash/union'
 import { combineReducers } from 'redux'
+import { AppBarStyle } from '../util'
 import * as Actions from '../actions'
 
-const entities = (state = { posts: {} }, action) => {
+const entities = (state = { posts: {}, blogs: {} }, action) => {
     if (action.payload && action.payload.entities) {
         return merge({}, state, action.payload.entities)
     }
@@ -17,14 +18,14 @@ const user = (state = null, action) => {
     return state
 }
 
-const paginate = ({ types }) => {
+const paginate = ({ types, arrayName = 'posts', countName = 'count' }) => {
     const [requestType, successType, failureType] = types
 
     return function(state = {
         isFetching: false,
-        page: 1,
-        posts: [],
-        count: undefined
+        page: 0,
+        [arrayName]: [],
+        [countName]: undefined
     }, action) {
         switch (action.type) {
             case requestType:
@@ -33,8 +34,8 @@ const paginate = ({ types }) => {
                 return merge({}, state, {
                     isFetching: false,
                     page: state.page + 1,
-                    posts: union(state.posts, action.payload.result.posts),
-                    count: action.payload.result.count
+                    [arrayName]: union(state[arrayName], action.payload.result[arrayName]),
+                    [countName]: action.payload.result[countName]
                 })
             case failureType:
                 return merge({}, state, { isFetching: false })
@@ -45,10 +46,71 @@ const paginate = ({ types }) => {
 }
 
 const pagination = combineReducers({
-    dashboard: paginate({ types: [Actions.DASHBOARD_REQUEST, Actions.DASHBOARD_SUCCESS, Actions.DASHBOARD_FAILURE] }),
-    likes: paginate({ types: [Actions.LIKES_REQUEST, Actions.LIKES_SUCCESS, Actions.LIKES_FAILURE] })
-
+    dashboard: paginate({
+        types: [Actions.DASHBOARD_REQUEST, Actions.DASHBOARD_SUCCESS, Actions.DASHBOARD_FAILURE]
+    }),
+    likes: paginate({
+        types: [Actions.LIKES_REQUEST, Actions.LIKES_SUCCESS, Actions.LIKES_FAILURE],
+        arrayName: 'liked_posts',
+        countName: 'liked_count'
+    }),
+    following: paginate({
+        types: [Actions.FOLLOWING_REQUEST, Actions.FOLLOWING_SUCCESS, Actions.FOLLOWING_FAILURE],
+        arrayName: 'blogs',
+        countName: 'total_blogs'
+    })
 })
 
-const rootReducer = combineReducers({ entities, user, pagination })
+const blogs = (state = {}, action) => {
+    var { blog_name = '' } = action.meta || {}
+    if (!blog_name) {
+        return state
+    }
+    var ori = state[blog_name] || {},
+        oriPage = ori.page,
+        oriPosts = ori.posts
+
+    switch (action.type) {
+        case Actions.BLOGPOST_REQUEST:
+            return merge({}, state, {
+                [blog_name]: { isFetching: true, page: oriPage || 0, posts: oriPosts || [] }
+            })
+        case Actions.BLOGPOST_SUCCESS:
+            return merge({}, state, {
+                [blog_name]: {
+                    isFetching: false,
+                    page: oriPage ? oriPage + 1 : 1,
+                    posts: union(oriPosts ? oriPosts : [], action.payload.result['posts']),
+                    total_posts: action.payload.result['total_posts']
+                }
+            })
+        case Actions.BLOGPOST_FAILURE:
+            return merge({}, state, {
+                [blog_name]: {
+                    isFetching: false
+                }
+            })
+        default:
+            return state
+    }
+}
+
+const appbar = (state = { style: AppBarStyle.COMMON_STYLE }, action) => {
+    switch (action.type) {
+        case Actions.CHANGE_APPBAR:
+            return merge({}, state, action.payload)
+        default:
+            return state
+    }
+}
+
+const error = (state = { error: false, type: '' }, action) => {
+    if (action.error) {
+        return merge({}, state, { error: true, type: action.type }, action.payload)
+    } else {
+        return { error: false, type: '' }
+    }
+}
+
+const rootReducer = combineReducers({ entities, user, pagination, error, blogs, appbar })
 export default rootReducer

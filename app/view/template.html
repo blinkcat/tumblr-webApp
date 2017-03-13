@@ -3,10 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>ui</title>
+    <meta name="viewport" id="viewport" content="initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>{{title}}</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <$ cssFiles|safe $>
 </head>
 
 <body>
@@ -14,8 +17,7 @@
     <script type="text/javascript">
     	window.__INITIAL_STATE__ = {{initialState|safe}}
     </script>
-    <script type="text/javascript" src='/vendor.js'></script>
-    <script type="text/javascript" src='/bundle.js'></script>
+    <$ jsFiles|safe $>
 </body>
 
 </html>

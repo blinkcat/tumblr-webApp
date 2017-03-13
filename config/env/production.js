@@ -1,3 +1,6 @@
 module.exports = {
-    callbackURL: ''
+    callbackURL: '',
+    apiURL: '',
+    credentials: 'same-origin',
+    pageSize: 10
 }

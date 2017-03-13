@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { loadUserInfo } from '../actions'
+import { fetchUserInfo } from '../actions'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import TAppBar from '../components/TAppBar'
@@ -11,15 +11,18 @@ class App extends Component {
     }
 
     componentDidMount() {
-        !this.props.user && this.props.loadUserInfo()
+        this.props.dispatch(fetchUserInfo())
+    }
+
+    static dispatchWork(store, renderProps) {
+        return store.dispatch(fetchUserInfo())
     }
 
     render() {
-        console.log('App is changed')
         return (
             <MuiThemeProvider>
             <div>
-              <TAppBar {...this.props.user}/>
+              <TAppBar {...this.props.user} appbar={this.props.appbar}/>
               {this.props.children}
             </div>
           </MuiThemeProvider>
@@ -27,11 +30,13 @@ class App extends Component {
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
-    const { user = {} } = state
-    return { user }
+const mapStateToProps = (state) => {
+    const { user = {}, appbar } = state
+    return { user, appbar }
 }
 
-export default connect(mapStateToProps, {
-    loadUserInfo
-})(App)
+export default connect(mapStateToProps)(App)
+
+App.propTypes = {
+    user: React.PropTypes.object
+}

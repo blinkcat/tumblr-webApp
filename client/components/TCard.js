@@ -2,12 +2,10 @@ import React, { Component } from 'react'
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card'
 import FlatButton from 'material-ui/FlatButton'
 import IconButton from 'material-ui/IconButton'
-// import ActionFavorite from 'material-ui/svg-icons/action/favorite'
-// import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border'
 import SocialShare from 'material-ui/svg-icons/social/share'
-// import { red900 } from 'material-ui/styles/colors'
 import LikeButton from './LikeButton'
 import merge from 'lodash/merge'
+import TAvatar from './TAvatar'
 
 export default class TCard extends Component {
     constructor(props) {
@@ -39,8 +37,6 @@ export default class TCard extends Component {
                     <source src={curPost.video_url} />
                   </video>
               </CardMedia> 
-              <CardTitle title = "Card title"
-              subtitle = "Card subtitle" />
               <CardText>
                   {curPost.summary}
               </CardText>
@@ -60,8 +56,6 @@ export default class TCard extends Component {
                   })
                 }
               </CardMedia> 
-              <CardTitle title = "Card title"
-              subtitle = "Card subtitle" />
               <CardText>
                   {curPost.summary}
               </CardText>
@@ -96,24 +90,20 @@ export default class TCard extends Component {
 
     render() {
         const baseInfo = this.baseInfo()
-            // var likedDom = baseInfo.liked ? <ActionFavorite color={red900}/> : <ActionFavoriteBorder />
         return (
             <Card>
               <CardHeader
                 title={baseInfo.blog_name}
                 subtitle={baseInfo.date}
-                avatar={baseInfo.avatar}
+                avatar={<TAvatar to={`/blog/${baseInfo.blog_name}`} src={baseInfo.avatar} style={{display:'inline-flex',marginRight:'16px'}}/>}
               />
               {this.getJSX()}
-              <CardActions>
-                <FlatButton label={baseInfo.note_count+' 热度'} />
-                {/*<IconButton tooltip="喜欢" style={{float:'right',width:'36px',height:'36px'}}>
-                  {likedDom}
-                </IconButton>*/}
-                <LikeButton tooltip="喜欢" style={{float:'right',width:'36px',height:'36px'}} id={baseInfo.id} reblogKey={baseInfo.reblog_key} defaultLiked={baseInfo.liked}/>
-                <IconButton tooltip="分享" style={{float:'right',width:'36px',height:'36px'}}>
+              <CardActions style={{'textAlign':'right'}}>
+                <FlatButton label={baseInfo.note_count+' 热度'} style={{position: 'absolute',left: '8px',top: '50%',transform: 'translateY(-50%)'}}/>
+                <IconButton tooltip="分享" style={{'verticalAlign':'middle',marginRight:0}}>
                   <SocialShare />
                 </IconButton>
+                <LikeButton tooltip="喜欢" style={{'verticalAlign':'middle'}} id={baseInfo.id} reblogKey={baseInfo.reblog_key} defaultLiked={baseInfo.liked}/>
               </CardActions>
             </Card>
         )

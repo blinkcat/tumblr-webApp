@@ -1,5 +1,6 @@
 body {
     font-family: 'Roboto', sans-serif;
+    line-height: 24px;
 }
 
 button,
@@ -22,4 +23,36 @@ figure {
 
 img {
     max-width: 100%;
+}
+
+.blog-info {
+    text-align: center;
+    position: relative;
+    .bg {
+        height: 186px;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, 0);
+        max-width: 540px;
+        width: 100%;
+        background-size: cover;
+        z-index: -1;
+    }
+    h1 {
+        color: #444444;
+        font-weight: bold;
+        font-size: 36px;
+        line-height: 1.2;
+        margin: 0;
+        word-wrap: break-word;
+        text-align: center;
+    }
+    p {
+        color: rgba(68, 68, 68, 0.701961);
+        text-align: center;
+        font-size: 14px;
+        width: 80%;
+        margin: 0 auto;
+    }
 }

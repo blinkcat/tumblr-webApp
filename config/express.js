@@ -5,10 +5,13 @@ const express = require('express'),
     session = require('express-session'),
     bodyParser = require('body-parser'),
     nunjucks = require('nunjucks'),
+    favicon = require('serve-favicon'),
     secret = process.env.secret || 'blinkcat'
 
 module.exports = function(app) {
     //添加中间件 
+    app.use(favicon(path.join(__dirname, '../favicon.ico')))
+    app.use(compression())
     app.use(express.static(path.join(__dirname, '../build')))
     nunjucks.configure('app/view', {
         express: app
@@ -24,7 +27,6 @@ module.exports = function(app) {
     if (process.env.NODE_ENV == 'development') {
         var webpackMiddleware = require('webpack-dev-middleware'),
             webpack = require('webpack'),
-            tinylr = require('tiny-lr'),
             webpackConfig = require('../webpack.config.dev'),
             compiler = webpack(webpackConfig)
 
@@ -35,15 +37,8 @@ module.exports = function(app) {
                 colors: true
             }
         })).use(require("webpack-hot-middleware")(compiler))
-
-        // app.use(require('connect-livereload')({
-        //     port: 8080
-        // })).use(tinylr.middleware({ app }))
-
     }
-    app.use(compression())
     app.use(function(err, req, res, next) {
-        console.log('err', err)
-        res.status(500).send('test').end()
+        res.status(500).send(err.stack).end()
     })
 }

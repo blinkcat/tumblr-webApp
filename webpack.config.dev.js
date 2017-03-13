@@ -6,7 +6,7 @@ var path = require('path'),
 
 module.exports = {
     entry: [
-        'webpack-hot-middleware/client',
+        'webpack-hot-middleware/client?reload=true',
         './client/index.js'
     ],
     output: {
@@ -28,7 +28,7 @@ module.exports = {
             loader: 'url?limit=3072'
         }, {
             test: /\.scss$/,
-            loader: cssExtractor.extract('style-loader', 'css-loader?sourceMap', 'sass-loader?sourceMap')
+            loader: cssExtractor.extract('style-loader', 'css-loader?sourceMap!sass-loader?sourceMap')
         }, {
             test: /\.css$/,
             loader: cssExtractor.extract('style-loader', 'css-loader')
