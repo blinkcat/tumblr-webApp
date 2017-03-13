@@ -29,7 +29,7 @@ module.exports = {
             loader: 'url?limit=3072'
         }, {
             test: /\.scss$/,
-            loader: cssExtractor.extract('style-loader', 'css-loader', 'sass-loader')
+            loader: cssExtractor.extract('style-loader', 'css-loader!sass-loader')
         }, {
             test: /\.css$/,
             loader: cssExtractor.extract('style-loader', 'css-loader')

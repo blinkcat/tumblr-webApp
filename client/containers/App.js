@@ -14,6 +14,10 @@ class App extends Component {
         this.props.dispatch(fetchUserInfo())
     }
 
+    static dispatchWork(store, renderProps) {
+        return store.dispatch(fetchUserInfo())
+    }
+
     render() {
         return (
             <MuiThemeProvider>

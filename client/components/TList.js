@@ -8,12 +8,23 @@ export default class TList extends Component {
         super(props)
     }
 
+    getLoadMoreBtn() {
+        var isOver = this.props.isOver
+        if (isOver) {
+            return <RaisedButton label="没有更多" fullWidth={true} />
+        } else {
+            return <RaisedButton label="加载更多" fullWidth={true} onClick={this.props.loadData} />
+        }
+    }
+
     render() {
-        const style = { 'maxWidth': '540px', margin: '4px auto 10px' },
+        const outerStyle = this.props.outerStyle || { paddingTop: '66px' },
+            style = this.props.style || { 'maxWidth': '540px', margin: '4px auto 10px' },
             posts = this.props.posts
-        var btnDom = this.props.isFetching ? <CircularProgress /> : <RaisedButton label="加载更多" fullWidth={true} onClick={this.props.loadData} />
+        var btnDom = this.props.isFetching ? <CircularProgress /> :
+            this.getLoadMoreBtn()
         return (
-            <ul style={{paddingTop:'66px'}}>
+            <ul style={outerStyle}>
             {
                 posts.map((post)=>{
                     return (

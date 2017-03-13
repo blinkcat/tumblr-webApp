@@ -18,6 +18,10 @@ class Dashboard extends Component {
         this.props.dispatch(fetchDashBoard())
     }
 
+    static dispatchWork(store){
+        return store.dispatch(fetchDashBoard())
+    }
+
     render() {
         const { isFetching, posts } = this.props
         var dom = isFetching && posts.length == 0 ?

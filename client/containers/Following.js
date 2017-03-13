@@ -6,6 +6,8 @@ import Divider from 'material-ui/Divider'
 import CircularProgress from 'material-ui/CircularProgress'
 import { connect } from 'react-redux'
 import { fetchFollowing } from '../actions'
+import { pageSize } from '../../config'
+import browserHistory from 'react-router/lib/browserHistory'
 
 class Following extends Component {
     constructor(props) {
@@ -21,19 +23,33 @@ class Following extends Component {
         this.props.dispatch(fetchFollowing())
     }
 
-    render() {
-            var loading = <div style={{textAlign:'center',position:'fixed',left:'50%',top:'50%',transform:'translate(-50%,-50%)'}}><CircularProgress size={60} thickness={7} /></div>,
-                loadMore = <div style = {{textAlign: 'center', maxWidth: '600px', margin: '10px auto 0' }}> {this.props.isFetching ? <CircularProgress /> : <RaisedButton style={{padding:0}} label="加载更多" fullWidth={true} onClick={this.loadFollowing} /> }</div>
+    getLoadMoreBtn() {
+        var isOver = this.props.isOver
+        if (isOver) {
+            return <RaisedButton style={{padding:0}} label="没有更多" fullWidth={true} />
+        } else {
+            return <RaisedButton style={{padding:0}} label="加载更多" fullWidth={true} onClick={this.loadFollowing} />
+        }
+    }
 
-            return (
-                <div style={{position:'relative'}}>
+    static dispatchWork(store) {
+        store.dispatch(fetchFollowing())
+    }
+
+    render() {
+        const { blogs, isFetching, isOver } = this.props
+        var loading = <div style={{textAlign:'center',position:'fixed',left:'50%',top:'50%',transform:'translate(-50%,-50%)'}}><CircularProgress size={60} thickness={7} /></div>,
+            loadMore = <div style = {{textAlign: 'center', maxWidth: '600px', margin: '10px auto 0' }}> {isFetching ? <CircularProgress /> : this.getLoadMoreBtn() }</div>
+
+        return (
+            <div style={{position:'relative'}}>
                 {
-                    this.props.isFetching && this.props.blogs.length == 0? loading
+                    isFetching && blogs.length == 0? loading
                     : 
                     <div>
                         <List style={ {paddingTop: '66px', maxWidth: '600px', margin: '0 auto'} }>
                             {                   
-                                this.props.blogs.map(cur=>{
+                                blogs.map(cur=>{
                                     return (
                                         <div key={cur.name}>
                                             <ListItem 
@@ -41,6 +57,7 @@ class Following extends Component {
                                                 primaryText={cur.name} 
                                                 secondaryText={cur.updated} 
                                                 rightIconButton={ <RaisedButton label="取消关注" />}
+                                                onTouchTap={()=>{browserHistory.push(`/blog/${cur.name}`)}}
                                                 />
                                             <Divider inset={true} />
                                         </div>
@@ -52,22 +69,25 @@ class Following extends Component {
                     </div>
                 } 
                 </div>
-            )
+        )
     }
 }
 
 const mapStateToProps = (state) => {
+    const following = state.pagination.following
     return {
-        blogs: state.pagination.following.blogs.map((cur) => {
+        blogs: following.blogs.map((cur) => {
             return state.entities.blogs[cur]
         }),
-        isFetching: state.pagination.following.isFetching
+        isFetching: following.isFetching,
+        isOver: following.page * pageSize >= following.total_blogs
     }
 }
 
 Following.propTypes = {
     isFetching: React.PropTypes.bool,
-    blogs: React.PropTypes.arrayOf(React.PropTypes.object)
+    blogs: React.PropTypes.arrayOf(React.PropTypes.object),
+    isOver: React.PropTypes.bool
 }
 
 export default connect(mapStateToProps)(Following)

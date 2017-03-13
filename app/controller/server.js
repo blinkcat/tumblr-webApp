@@ -6,7 +6,6 @@ import { RouterContext, match } from 'react-router'
 import browserHistory from 'react-router/lib/browserHistory'
 import Router from 'react-router/lib/Router'
 import routes from '../../client/routes'
-import { fetchUserInfo, fetchDashBoard } from '../../client/actions'
 
 exports.index = function(req, res, next) {
     const store = configureStore()
@@ -19,7 +18,8 @@ exports.index = function(req, res, next) {
         } else if (redirectLocation) {
             res.redirect(redirectLocation.pathname + redirectLocation.search)
         } else if (renderProps) {
-            Promise.all([/*store.dispatch(fetchUserInfo()), store.dispatch(fetchDashBoard())*/])
+            const components = renderProps.components.filter(cur => cur && cur.dispatchWork)
+            Promise.all(components.map(cur => cur.dispatchWork(store, renderProps)))
                 .then(() => {
                     const html = renderToString(
                         <Provider store={store}>
