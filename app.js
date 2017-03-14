@@ -11,7 +11,7 @@ if (process.env.NODE_ENV != 'production') {
 
 const express = require('express'),
     app = express(),
-    port = 8080
+    port = process.env.PORT || 8080
 
 require('./config/express')(app)
 require('./config/route')(app)
