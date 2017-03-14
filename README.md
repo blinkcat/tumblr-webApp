@@ -1,4 +1,4 @@
-#React Demo with tumblr api
+# React Demo with tumblr api
 这个[demo](https://tumblrwebapp.herokuapp.com)使用了react + react-router + redux + webpack + material-ui + express, 通过tumblr api获取数据,服务器端渲染页面。
 ##Requirements
 -   NodeJS>=6.x
@@ -6,12 +6,12 @@
 -   tumblr的Consumer Key和Secret Key
 
 tumblr api的文档和key的申请方法在[此处](https://www.tumblr.com/docs/en/api/v2)。
-##Install
+## Install
 ```sh
 git clone git@github.com:blinkcat/tumblr-webApp.git
 npm install
 ```
-**NOTE:**需要在项目根目录下建立.env文件
+**NOTE:** 需要在项目根目录下建立.env文件
 ```sh
 cp .env.example .env
 ```
@@ -21,5 +21,5 @@ cp .env.example .env
 npm start
 ```
 接着访问[http://localhost:8080](http://localhost:8080)
-##Tests
+## Tests
 暂无
