@@ -34,7 +34,7 @@ export default class TList extends Component {
                     )
                 })
             }
-            <li style={{ 'maxWidth': '540px', margin: '4px auto 10px' ,textAlign:'center'}} key={0}>
+            <li style={{ 'maxWidth': '540px', margin: '4px auto 10px' ,textAlign:'center'}} key={posts.length}>
                 {btnDom}
             </li>
             </ul>

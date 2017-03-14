@@ -4,12 +4,13 @@ import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border'
 import { red900 } from 'material-ui/styles/colors'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { likePost, unlikePost } from '../actions'
+import { toggleLike } from '../actions'
+import { api } from '../util'
 
-export default class LikeButton extends Component {
+class LikeButton extends Component {
     constructor(props) {
         super(props)
-        this.state = { liked: this.props.defaultLiked }
+        this.state = { liked: this.props.defaultLiked, isFetching: false }
         this.like = this.like.bind(this)
         this.unlike = this.unlike.bind(this)
         this.toggle = this.toggle.bind(this)
@@ -19,12 +20,52 @@ export default class LikeButton extends Component {
         return this.state.liked ? <ActionFavorite color={red900}/> : <ActionFavoriteBorder />
     }
 
-    like() {
-        this.setState({ liked: true })
+    like(id) {
+        this.setState({ liked: true, isFetching: false })
+        this.props.dispatch(toggleLike(id, true))
     }
 
-    unlike() {
-        this.setState({ liked: false })
+    likePost({ id, reblogKey }) {
+        var _this = this
+        fetch(api.likePost.path, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'post',
+            body: JSON.stringify({ id, reblogKey })
+        }).then((res) => {
+            if (res.status == 200) {
+                _this.like(id)
+            } else {
+                _this.setState({ isFetching: false })
+            }
+        }).catch(e => {
+            console.log(e.message)
+        })
+    }
+
+    unlike(id) {
+        this.setState({ liked: false, isFetching: false })
+        this.props.dispatch(toggleLike(id, false))
+    }
+
+    unlikePost({ id, reblogKey }) {
+        var _this = this
+        fetch(api.unlikePost.path, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'post',
+            body: JSON.stringify({ id, reblogKey })
+        }).then((res) => {
+            if (res.status == 200) {
+                _this.unlike(id)
+            } else {
+                _this.setState({ isFetching: false })
+            }
+        }).catch(e => {
+            console.log(e.message)
+        })
     }
 
     doLike() {
@@ -32,20 +73,24 @@ export default class LikeButton extends Component {
         if (!id || !reblogKey) {
             return
         }
-        likePost({ id, reblogKey, cb: this.like })
+        this.likePost({ id, reblogKey })
     }
 
-    dounLike() {
+    doUnLike() {
         const { id, reblogKey } = this.props
         if (!id || !reblogKey) {
             return
         }
-        unlikePost({ id, reblogKey, cb: this.like })
+        this.unlikePost({ id, reblogKey })
     }
 
     toggle() {
+        if (this.state.isFetching) {
+            return false
+        }
+        this.setState({ isFetching: true })
         if (this.state.liked) {
-            this.dounLike()
+            this.doUnLike()
         } else {
             this.doLike()
         }
@@ -59,3 +104,6 @@ export default class LikeButton extends Component {
         )
     }
 }
+
+//只注入 dispatch，不监听 store
+export default connect()(LikeButton)
