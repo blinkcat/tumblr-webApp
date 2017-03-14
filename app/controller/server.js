@@ -49,11 +49,18 @@ exports.index = function(req, res, next) {
                         })
                     }
                 }).catch((err) => {
-                    res.status(500).end(`Internal Server Error ${err}`)
+                    // res.status(500).end(`Internal Server Error ${err}`)
+                    next(err)
                 })
         } else {
             res.status(404).end('Not found');
         }
     })
+}
 
+exports.exit = function(req, res) {
+    res.clearCookie('token')
+    res.clearCookie('secret')
+    req.session.destroy()
+    res.redirect('/login')
 }

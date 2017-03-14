@@ -12,7 +12,7 @@ class Likes extends Component {
     }
 
     componentDidMount() {
-        this.props.posts.length == 0 && this.props.dispatch(fetchLikes())
+        this.props.posts.length < pageSize && this.props.dispatch(fetchLikes())
     }
 
     loadLikes() {
@@ -45,7 +45,7 @@ const mapStateToProps = (state) => {
             return state.entities.posts[cur]
         }),
         isFetching: likes.isFetching,
-        isOver:likes.page*pageSize>=likes.liked_posts
+        isOver:likes.page*pageSize>=likes.liked_count
     }
 }
 

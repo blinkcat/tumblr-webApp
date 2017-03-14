@@ -7,6 +7,7 @@ import ActionHome from 'material-ui/svg-icons/action/home'
 import ActionFavorite from 'material-ui/svg-icons/action/favorite'
 import ActionNoteAdd from 'material-ui/svg-icons/action/note-add'
 import ActionSettings from 'material-ui/svg-icons/action/settings'
+import ActionExit from 'material-ui/svg-icons/action/exit-to-app'
 import Divider from 'material-ui/Divider'
 import ContentCreate from 'material-ui/svg-icons/content/create'
 import Avatar from 'material-ui/Avatar'
@@ -77,6 +78,7 @@ export default class TAppBar extends Component {
                       <ListItem primaryText="关注" leftIcon={<ActionNoteAdd />} rightIcon={<Badge badgeContent={following} primary={true}/>} onTouchTap={()=>{this.pushAndClose('/following')}}/>
                       <ListItem primaryText="设置" leftIcon={<ActionSettings />} />
                       <ListItem primaryText="新建帖子" leftIcon={<ContentCreate />} />
+                      <ListItem primaryText="退出" leftIcon={<ActionExit />} onTouchTap={()=>{location.href='/exit'}}/>
                     </List>
                     <Divider />
                     <List>
@@ -85,6 +87,7 @@ export default class TAppBar extends Component {
                             leftAvatar={<Avatar src={avatarSrc} />}
                             primaryText={name}
                             secondaryText={description}
+                            onTouchTap={()=>{this.pushAndClose(`/blog/${name}`)}}
                         />
                     </List> 
                 </Drawer>

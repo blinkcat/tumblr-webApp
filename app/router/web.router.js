@@ -7,6 +7,7 @@ var oauth = require('../controller/oauth'),
 var webRouter = express.Router()
 webRouter.get('/login', oauth.login)
 webRouter.get('/callback', oauth.handleCb)
+webRouter.get('/exit', server.exit)
 webRouter.use(requireAuth)
 webRouter.get('/', server.index)
 webRouter.get('/dashboard', server.index)

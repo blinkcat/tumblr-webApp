@@ -196,39 +196,11 @@ export const changeAppBar = (style = AppBarStyle.COMMON_STYLE) => ({
     payload: { style }
 })
 
-// export 
-export const likePost = ({ id, reblogKey, cb }) => {
-    fetch(api.likePost.path, {
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        method: 'post',
-        body: JSON.stringify({ id, reblogKey }),
-        credentials
-    }).then((res) => {
-        return res.json()
-    }).then((data) => {
-        cb && cb()
-    }).catch(e => {
-        console.log(e.message)
-    })
-}
-
-export const unlikePost = ({ id, reblogKey, cb }) => {
-    fetch(api.unlikePost.path, {
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        method: 'post',
-        body: JSON.stringify({ id, reblogKey }),
-        credentials
-    }).then((res) => {
-        return res.json()
-    }).then((data) => {
-        cb && cb()
-    }).catch(e => {
-        console.log(e.message)
-    })
-}
+export const TOGGLE_LIKE = 'TOGGLE_LIKE'
+export const toggleLike = (postId, like) => ({
+    type: TOGGLE_LIKE,
+    payload: {
+        postId,
+        like
+    }
+})

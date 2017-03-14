@@ -1,5 +1,6 @@
 import merge from 'lodash/merge'
 import union from 'lodash/union'
+import without from 'lodash/without'
 import { combineReducers } from 'redux'
 import { AppBarStyle } from '../util'
 import * as Actions from '../actions'
@@ -8,6 +9,21 @@ const entities = (state = { posts: {}, blogs: {} }, action) => {
     if (action.payload && action.payload.entities) {
         return merge({}, state, action.payload.entities)
     }
+    if (action.type == Actions.TOGGLE_LIKE) {
+        if (action.payload.like) {
+            return merge({}, state, {
+                posts: {
+                    [action.payload.postId]: { liked: true }
+                }
+            })
+        } else {
+            return merge({}, state, {
+                posts: {
+                    [action.payload.postId]: { liked: false }
+                }
+            })
+        }
+    }
     return state
 }
 
@@ -15,11 +31,18 @@ const user = (state = null, action) => {
     if (action.payload && action.payload.user) {
         return action.payload.user
     }
+    if (action.type == Actions.TOGGLE_LIKE) {
+        if (action.payload.like) {
+            return merge({}, state, { likes: state.likes + 1 })
+        } else {
+            return merge({}, state, { likes: state.likes - 1 })
+        }
+    }
     return state
 }
 
 const paginate = ({ types, arrayName = 'posts', countName = 'count' }) => {
-    const [requestType, successType, failureType] = types
+    const [requestType, successType, failureType, toggleType] = types
 
     return function(state = {
         isFetching: false,
@@ -39,6 +62,16 @@ const paginate = ({ types, arrayName = 'posts', countName = 'count' }) => {
                 })
             case failureType:
                 return merge({}, state, { isFetching: false })
+            case toggleType:
+                if (action.payload.like) {
+                    return merge({}, state, {
+                        [arrayName]: union([action.payload.postId], state[arrayName])
+                    })
+                } else {
+                    return merge({}, state, {
+                        [arrayName]: without(state[arrayName], action.payload.postId)
+                    })
+                }
             default:
                 return state
         }
@@ -50,7 +83,7 @@ const pagination = combineReducers({
         types: [Actions.DASHBOARD_REQUEST, Actions.DASHBOARD_SUCCESS, Actions.DASHBOARD_FAILURE]
     }),
     likes: paginate({
-        types: [Actions.LIKES_REQUEST, Actions.LIKES_SUCCESS, Actions.LIKES_FAILURE],
+        types: [Actions.LIKES_REQUEST, Actions.LIKES_SUCCESS, Actions.LIKES_FAILURE, Actions.TOGGLE_LIKE],
         arrayName: 'liked_posts',
         countName: 'liked_count'
     }),
