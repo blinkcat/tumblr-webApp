@@ -9,7 +9,7 @@ require('dotenv').config()
 
 const express = require('express'),
     app = express(),
-    port = process.env.PORT || 8080
+    port = 8080
 
 require('./config/express')(app)
 require('./config/route')(app)

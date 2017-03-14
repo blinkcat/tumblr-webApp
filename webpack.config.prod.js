@@ -42,8 +42,6 @@ module.exports = {
         new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js'),
         cssExtractor,
         new nunjucksHTML(),
-        new CleanWebpackPlugin(['build'], {
-            root: '.'
-        })
+        new CleanWebpackPlugin(['build'], {})
     ]
 }
