@@ -58,7 +58,7 @@ class Blog extends Component {
                         } >
                     </Avatar> 
                     <h1> { blog.title } </h1> 
-                    <p> { blog.description } </p> 
+                    <div className='des' dangerouslySetInnerHTML={{__html:blog.description}}></div> 
                 </div> 
                 <TList posts = { posts }
                     isFetching = { isFetching }

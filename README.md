@@ -21,5 +21,9 @@ cp .env.example .env
 npm start
 ```
 接着访问[http://localhost:8080](http://localhost:8080)
+## screenshot
+![screenshot-a](/blinkcat/tumblr-webApp/screenshot/a.png)
+![screenshot-b](/blinkcat/tumblr-webApp/screenshot/b.png)
+![screenshot-c](/blinkcat/tumblr-webApp/screenshot/c.png)
 ## Tests
 暂无

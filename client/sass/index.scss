@@ -48,11 +48,15 @@ img {
         word-wrap: break-word;
         text-align: center;
     }
-    p {
+    .des {
         color: rgba(68, 68, 68, 0.701961);
         text-align: center;
         font-size: 14px;
         width: 80%;
         margin: 0 auto;
+        p {
+            margin: 0;
+            line-height: 1.5;
+        }
     }
 }
