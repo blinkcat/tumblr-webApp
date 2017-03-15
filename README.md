@@ -22,8 +22,6 @@ npm start
 ```
 接着访问[http://localhost:8080](http://localhost:8080)
 ## screenshot
-![screenshot-a](./screenshot/a.png)
-![screenshot-b](./screenshot/b.png)
-![screenshot-c](./screenshot/c.png)
+![screenshot-a](./screenshot/a.png) ![screenshot-b](./screenshot/b.png) ![screenshot-c](./screenshot/c.png)
 ## Tests
 暂无
